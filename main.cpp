@@ -20,6 +20,7 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
     }
 
     // rasterlize
+#ifdef LOW_EFFiCIENCY
     float k = std::abs(float(y1 - y0) / (x1 - x0));
     float error = 0.f;
     int y = y0;
@@ -42,6 +43,32 @@ void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color) {
             error -= 1.0f;
         }
     }
+#else
+    // diss miss float
+    int k = 2 * std::abs(y1 - y0);
+    int dx = x1 - x0;
+    int error = 0;
+    int y = y0;
+    for (int x = x0; x <= x1; ++x)
+    {
+        if (steep)
+        {
+            image.set(y, x, color);
+        }
+        else
+        {
+            image.set(x, y, color);
+        }
+
+        error += k;
+        if (error > dx)
+        {
+            y += (y0 < y1 ? 1 : -1);
+            error -= 2 * dx;
+        }
+    }
+#endif
+
 }
 int main()
 {
