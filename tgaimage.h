@@ -26,6 +26,9 @@ struct TGAColor {
     std::uint8_t& operator[](const int i) { return bgra[i]; }
 };
 
+const TGAColor Green = { {0, 255, 0, 255},4 };
+const TGAColor Red = { {0, 0, 255, 255}, 4 };
+
 struct TGAImage {
     enum Format { GRAYSCALE=1, RGB=3, RGBA=4 };
 
