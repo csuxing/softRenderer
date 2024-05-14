@@ -1,0 +1,3 @@
+[submodule "thirdParty/spdlog"]
+	path = thirdParty/spdlog
+	url = https://github.com/gabime/spdlog.git

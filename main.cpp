@@ -1,9 +1,11 @@
 #include <iostream>
 #include <cstring>
+#include <random>
 #include "tgaimage.h"
 #include "model.h"
 #include "geometry.h"
-#include <random>
+#include "hashHelper.h"
+
 struct Vec2i
 {
     int x, y;
@@ -154,6 +156,19 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 
 int main()
 {
+    size_t seed = 0;
+    int example = 0;
+
+    HashSpace::hash_param(seed, example, example, std::string("example"));
+    size_t seed1 = 0;
+    HashSpace::hash_param(seed1, example, example, std::string("example"));
+    if (seed == seed1)
+    {
+        std::cout << "hash function successful! \n";
+    }
+
+    Log::selfPrint(1, 2, 3, std::string("error"));
+
     Model* model = new Model("F:\\MyGithub\\softRenderer\\obj\\african_head\\african_head.obj");
     static constexpr int width = 800;
     static constexpr int height = 800;
