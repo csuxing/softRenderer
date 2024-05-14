@@ -6,7 +6,7 @@
 #include "model.h"
 #include "geometry.h"
 #include "hashHelper.h"
-
+#include <spdlog/spdlog.h>
 struct Vec2i
 {
     int x, y;
@@ -163,6 +163,9 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 
 int main()
 {
+    spdlog::info("Welcome to spdlog!");
+    spdlog::error("Some error message with arg: {}", 1);
+
     size_t seed = 0;
     int example = 0;
 
