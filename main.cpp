@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <random>
+
 #include "tgaimage.h"
 #include "model.h"
 #include "geometry.h"
@@ -9,6 +10,12 @@
 struct Vec2i
 {
     int x, y;
+    Vec2i() = default;
+    Vec2i(int inx, int iny)
+    {
+        x = inx;
+        y = iny;
+    }
     Vec2i operator-(const Vec2i& other)
     {
         return Vec2i(x - other.x, y - other.y);
@@ -174,9 +181,12 @@ int main()
     static constexpr int height = 800;
     TGAImage image(width, height, TGAImage::RGB);
     std::default_random_engine rnd;
-    std::uniform_int_distribution uniformEngine(0, 255);
-    auto a = uniformEngine(rnd);
-    const vec3 lightDir = vec3(0, 0, -1);
+
+    vec3 lightDir;
+    lightDir.x = 0;
+    lightDir.y = 0;
+    lightDir.z = -1;
+
     for (int i = 0; i < model->nfaces(); i++) {
         vec3 v0 = model->vert(i, 0);
         vec3 v1 = model->vert(i, 1);
