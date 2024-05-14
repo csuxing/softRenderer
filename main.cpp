@@ -1,12 +1,15 @@
 #include <iostream>
 #include <cstring>
 #include <random>
+#include <direct.h>
+#include <spdlog/spdlog.h>
 
 #include "tgaimage.h"
 #include "model.h"
-#include "geometry.h"
-#include "hashHelper.h"
-#include <spdlog/spdlog.h>
+#include "math/geometry.h"
+#include "utils/hashHelper.h"
+#include "platform/fileSystem.h"
+
 struct Vec2i
 {
     int x, y;
@@ -163,23 +166,8 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
 
 int main()
 {
-    spdlog::info("Welcome to spdlog!");
-    spdlog::error("Some error message with arg: {}", 1);
-
-    size_t seed = 0;
-    int example = 0;
-
-    HashSpace::hash_param(seed, example, example, std::string("example"));
-    size_t seed1 = 0;
-    HashSpace::hash_param(seed1, example, example, std::string("example"));
-    if (seed == seed1)
-    {
-        std::cout << "hash function successful! \n";
-    }
-
-    Log::selfPrint(1, 2, 3, std::string("error"));
-
-    Model* model = new Model("F:\\MyGithub\\softRenderer\\obj\\african_head\\african_head.obj");
+    std::string path = Jerry::get(Jerry::Type::Assets, "african_head/african_head.obj");
+    Model* model = new Model(path);
     static constexpr int width = 800;
     static constexpr int height = 800;
     TGAImage image(width, height, TGAImage::RGB);
@@ -210,7 +198,7 @@ int main()
 
         triangle(t0, t1, t2, image, { {intensity, intensity, intensity, 255}, 4 });
     }
-
-    image.write_tga_file("F:\\MyGithub\\build\\softRenderer\\Debug\\output.tga");
+    std::string pathoutput = Jerry::get(Jerry::Type::Storage, "output.tga");
+    image.write_tga_file(pathoutput);
     return 0;
 }
