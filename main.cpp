@@ -9,7 +9,8 @@
 #include "math/geometry.h"
 #include "utils/hashHelper.h"
 #include "platform/fileSystem.h"
-
+#include "utils/memalign.h"
+#include "render/global_context.h"
 struct Vec2i
 {
     int x, y;
@@ -164,8 +165,31 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage& image, TGAColor color)
     }
 }
 
+class TestClass
+{
+public:
+    TestClass()
+    {
+        x = 0;
+        y = 1;
+        is = true;
+    }
+    void* operator new(std::size_t size) noexcept
+    {
+        return Utils::alignd_alloc(size, alignof(TestClass));
+    }
+private:
+    int x, y;
+    bool is;
+};
+
 int main()
 {
+    // init global context
+    auto globalContext = Jerry::GlobalContext::getInstance();
+    globalContext->startSystems();
+
+    TestClass* p = new TestClass;
     std::string path = Jerry::get(Jerry::Type::Assets, "african_head/african_head.obj");
     Model* model = new Model(path);
     static constexpr int width = 800;

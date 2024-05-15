@@ -1,8 +1,10 @@
 cmake_minimum_required (VERSION 3.1)
 project(softRenderer)
 
-file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}//output")
+set(UTILS_DIR "${CMAKE_SOURCE_DIR}/utils")
 
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}//output")
+ 
 # use folder
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -24,11 +26,14 @@ add_subdirectory(thirdParty)
 add_subdirectory(math)
 add_subdirectory(utils)
 add_subdirectory(platform)
+add_subdirectory(render)
 
 file(GLOB SOURCES *.h *.cpp)
-
+ 
 add_executable(${PROJECT_NAME} ${SOURCES}) 
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE math)
 target_link_libraries(${PROJECT_NAME} PRIVATE utils)
 target_link_libraries(${PROJECT_NAME} PRIVATE platform)
+target_link_libraries(${PROJECT_NAME} PRIVATE render)

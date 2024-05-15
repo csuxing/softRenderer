@@ -1,8 +1,9 @@
 #include <unordered_map>
 #include <assert.h>
-#include "fileSystem.h"
 #include <stdlib.h>
 #include <direct.h>
+
+#include "fileSystem.h"
 namespace Jerry
 {
     const std::unordered_map<Type, std::string> relative_paths = {
