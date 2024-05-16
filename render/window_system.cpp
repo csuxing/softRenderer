@@ -41,4 +41,8 @@ namespace Jerry
     {
         glfwPollEvents();
     }
+    bool WindowSystem::shouldClose() const
+    {
+        return glfwWindowShouldClose(m_window);
+    }
 }
