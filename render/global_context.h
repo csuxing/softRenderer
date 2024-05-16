@@ -15,6 +15,10 @@ namespace Jerry
 
         std::shared_ptr<LogSystem> m_loggerSystem;
         std::shared_ptr<WindowSystem> m_windowSystem;
+
+    protected:
+        // load vulkan library && function pointer
+        void initVulkan();
     private:
         GlobalContext() = default;
         ~GlobalContext();

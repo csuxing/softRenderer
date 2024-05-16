@@ -7,7 +7,7 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}//output")
  
 # use folder
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
- 
+  
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

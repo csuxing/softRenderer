@@ -11,3 +11,6 @@ if(NOT TARGET glfw)
     add_subdirectory(glfw)
     set_property(TARGET glfw PROPERTY FOLDER "ThirdParty")
 endif()
+
+add_subdirectory(volk)
+set_property(TARGET volk PROPERTY FOLDER "ThirdParty")
