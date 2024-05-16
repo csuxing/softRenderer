@@ -34,11 +34,11 @@ namespace Jerry
     bool JerryEngine::tickOneFrame(float delta_time)
     {
         std::shared_ptr<WindowSystem> windowSystem = GlobalContext::getInstance()->m_windowSystem;
+        windowSystem->pollEvents();
         // tick logical
         tickLogical();
         // tick render
         tickRender();
-        windowSystem->pollEvents();
         return true;
     }
     float JerryEngine::calculateDeltaTime()

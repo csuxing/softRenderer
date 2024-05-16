@@ -7,3 +7,6 @@
 [submodule "thirdParty/volk"]
 	path = thirdParty/volk
 	url = https://github.com/zeux/volk.git
+[submodule "thirdParty/vulkan"]
+	path = thirdParty/vulkan
+	url = https://gitee.com/xing_yu_hang/Vulkan-Headers.git
