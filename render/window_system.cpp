@@ -45,4 +45,9 @@ namespace Jerry
     {
         return glfwWindowShouldClose(m_window);
     }
+    void WindowSystem::setFocusMode(bool mode)
+    {
+        m_isFocusMode = mode;
+        glfwSetInputMode(m_window, GLFW_CURSOR, m_isFocusMode ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
 }

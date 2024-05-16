@@ -12,9 +12,18 @@ namespace Jerry
         WindowCreateInfo create_info{};
         m_windowSystem->initalize(create_info);
     }
+    void GlobalContext::shutdownSystem()
+    {
+        m_windowSystem.reset();
+        m_loggerSystem.reset();
+    }
     GlobalContext* GlobalContext::getInstance()
     {
         static GlobalContext instance;
         return &instance;
+    }
+    GlobalContext::~GlobalContext()
+    {
+        
     }
 }

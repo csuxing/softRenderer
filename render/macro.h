@@ -5,7 +5,7 @@
 #include "log_system.h"
 
 #define LOG_HELPER(LOG_LEVEL, ...)\
-    Jerry::GlobalContext::getInstance()->m_loggerSystem->log(LOG_LEVEL, "[" + std::string(__FUNCTION__) + "]" + __VA_ARGS__);
+    Jerry::GlobalContext::getInstance()->m_loggerSystem->log(LOG_LEVEL, "[" + std::string(__FUNCTION__) + "] : " + __VA_ARGS__);
 
 #define LOG_DEBUG(...) LOG_HELPER(LogSystem::LogLevel::kDebug, __VA_ARGS__);
 

@@ -12,11 +12,12 @@ namespace Jerry
     }
     void JerryEngine::shutdownEngine()
     {
-
+        auto globalContext = GlobalContext::getInstance();
+        globalContext->shutdownSystem();
     }
     void JerryEngine::initialize()
     {
-
+        // initilize scene
     }
     void JerryEngine::run()
     {
@@ -26,17 +27,30 @@ namespace Jerry
         while (!windowSystem->shouldClose())
         {
             const float delta= calculateDeltaTime();
+            // LOG_DEBUG(std::to_string(delta));
             tickOneFrame(delta);
         }
     }
     bool JerryEngine::tickOneFrame(float delta_time)
     {
         std::shared_ptr<WindowSystem> windowSystem = GlobalContext::getInstance()->m_windowSystem;
+        // tick logical
+        tickLogical();
+        // tick render
+        tickRender();
         windowSystem->pollEvents();
-        return false;
+        return true;
     }
     float JerryEngine::calculateDeltaTime()
     {
-        return 0.0f;
+        float deltaTime{};
+        {
+            using namespace std::chrono;
+            steady_clock::time_point tickTimePoint = steady_clock::now();
+            duration<float> timeSpan = duration_cast<duration<float>>(tickTimePoint - m_lastTickTimePoint);
+            deltaTime = timeSpan.count();
+            m_lastTickTimePoint = tickTimePoint;
+        }
+        return deltaTime;
     }
 }

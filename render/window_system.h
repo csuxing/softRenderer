@@ -24,7 +24,8 @@ namespace Jerry
         void initalize(WindowCreateInfo create_info);
         void pollEvents() const;
         bool shouldClose() const;
-
+        void setFocusMode(bool mode);
+        
         // declare function
         typedef std::function<void()>                   onResetFunc;
         typedef std::function<void(int, int, int, int)> onKeyFunc;

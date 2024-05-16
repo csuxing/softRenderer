@@ -16,6 +16,8 @@ namespace Jerry
     protected:
 
         bool tickOneFrame(float delta_time);
+        void tickLogical() {};
+        void tickRender() {};
         float calculateDeltaTime();
 
         bool m_isQuit{ false };

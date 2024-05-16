@@ -10,13 +10,14 @@ namespace Jerry
     {
     public:
         void startSystems();
+        void shutdownSystem();
         static GlobalContext* getInstance();
 
         std::shared_ptr<LogSystem> m_loggerSystem;
         std::shared_ptr<WindowSystem> m_windowSystem;
     private:
         GlobalContext() = default;
-        ~GlobalContext() = default;
+        ~GlobalContext();
     };
 }
 
