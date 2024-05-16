@@ -1,6 +1,5 @@
 #include "window_system.h"
 
-#include "GLFW/glfw3.h"
 #include "macro.h"
 
 namespace Jerry
@@ -24,6 +23,22 @@ namespace Jerry
             return;
         }
 
+        glfwSetWindowUserPointer(m_window, this);
+        glfwSetKeyCallback(m_window, keyCallback);
+        glfwSetCharCallback(m_window, charCallback);
+        glfwSetCharModsCallback(m_window, charModsCallback);
+        glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
+        glfwSetCursorPosCallback(m_window, cursorPosCallback);
+        glfwSetCursorEnterCallback(m_window, cursorEnterCallback);
+        glfwSetScrollCallback(m_window, scrollCallback);
+        glfwSetDropCallback(m_window, dropCallback);
+        glfwSetWindowSizeCallback(m_window, windowSizeCallback);
+        glfwSetWindowCloseCallback(m_window, windowCloseCallback);
+
         glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+    }
+    void WindowSystem::pollEvents() const
+    {
+        glfwPollEvents();
     }
 }
