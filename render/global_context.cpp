@@ -1,9 +1,10 @@
+#include <volk.h>
+
 #include "global_context.h"
 #include "log_system.h"
 #include "window_system.h"
 #include "macro.h"
-
-#include <volk.h>
+#include "core/instance.h"
 
 namespace Jerry
 {
@@ -15,6 +16,10 @@ namespace Jerry
         {
             LOG_FATAL("vulkan init faild£¡");
         }
+        // init instance
+        std::unordered_map<const char*, bool> temp;
+        std::vector<const char*> temp1;
+        std::shared_ptr<RHI::Instance> instance = std::make_shared<RHI::Instance>("", temp, temp1);
     }
     void GlobalContext::startSystems()
     {

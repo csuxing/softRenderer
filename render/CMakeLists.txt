@@ -3,10 +3,14 @@ project(render LANGUAGES C CXX)
 
 # set core files
 set(CORE_FILES 
+    core/error.h
+    core/helpers.h
     core/instance.h
     core/instance.cpp
     core/device.h
     core/device.cpp
+    core/physical_device.h
+    core/physical_device.cpp
 )
 
 # find other files
