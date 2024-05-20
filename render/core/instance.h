@@ -27,10 +27,11 @@ namespace RHI
 			bool                                          headless = false,
 			uint32_t                                      api_version = VK_API_VERSION_1_0);
 
-		std::shared_ptr<Instance> getshardFromThis()
-		{
-			return shared_from_this();
-		}
+        void init() noexcept
+        {
+            query_gpus();
+        }
+
 		/**
 		 * @brief Queries the GPUs of a VkInstance that is already created
 		 * @param instance A valid VkInstance
@@ -46,11 +47,6 @@ namespace RHI
 		Instance& operator=(const Instance&) = delete;
 
 		Instance& operator=(Instance&&) = delete;
-
-		/**
-		 * @brief Queries the instance for the physical devices on the machine
-		 */
-		void query_gpus();
 
 		/**
 		 * @brief Tries to find the first available discrete GPU that can render to the given surface
@@ -90,6 +86,14 @@ namespace RHI
 		bool get_layer_properties(const char* layerName, VkLayerProperties& properties);
 
 	private:
+        std::shared_ptr<Instance> getshardFromThis()
+        {
+            return shared_from_this();
+        }
+        /**
+        * @brief Queries the instance for the physical devices on the machine
+        */
+        void query_gpus();
 		/**
 		 * @brief The Vulkan instance
 		 */

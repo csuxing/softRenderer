@@ -31,17 +31,14 @@ namespace RHI
     private:
         // Handle to the Vulkan instance
         std::shared_ptr<Instance> m_instance;
-
         // Handle to the Vulkan physical device
         VkPhysicalDevice m_handle{ VK_NULL_HANDLE };
         // The features that this GPU supports
         VkPhysicalDeviceFeatures features{};
-
         // The GPU properties
         VkPhysicalDeviceProperties properties;
         // The GPU memory
         VkPhysicalDeviceMemoryProperties memory_properties;
-
         // The GPU queue family properties
         std::vector<VkQueueFamilyProperties> queue_family_properties;
     };

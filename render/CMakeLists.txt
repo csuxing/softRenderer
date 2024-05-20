@@ -11,6 +11,8 @@ set(CORE_FILES
     core/device.cpp
     core/physical_device.h
     core/physical_device.cpp
+    core/vulkan_resource.h
+    core/vulkan_resource.cpp
 )
 
 # find other files

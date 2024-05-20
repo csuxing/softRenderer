@@ -248,7 +248,7 @@ namespace RHI
         LOG_DEBUG("instance init successful!");
 
         volkLoadInstance(handle);
-        query_gpus();
+
     }
     Instance::Instance(VkInstance instance)
     {
@@ -284,7 +284,6 @@ namespace RHI
         // find a discrete GPU
         for (auto& gpu : gpus)
         {
-            // to do : (xingyuhang)
             if (gpu->getProperties().deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
             {
                 size_t queueCount = gpu->getQueueFamilyProperties().size();
@@ -297,6 +296,10 @@ namespace RHI
                 }
             }
         }
+    }
+    bool Instance::is_enabled(const char* extension) const
+    {
+        return std::find_if(enabled_extensions.begin(), enabled_extensions.end(), [extension](const char* enabled_extension) { return strcmp(enabled_extension, extension); }) != enabled_extensions.end();
     }
     VkInstance Instance::get_handle() const
     {

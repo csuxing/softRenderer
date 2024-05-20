@@ -4,7 +4,7 @@ project(softRenderer)
 set(UTILS_DIR "${CMAKE_SOURCE_DIR}/utils")
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}//output")
- 
+  
 # use folder
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
