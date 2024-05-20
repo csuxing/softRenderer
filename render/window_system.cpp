@@ -1,6 +1,7 @@
+#include <volk.h>
 #include "window_system.h"
-
 #include "macro.h"
+#include "core/instance.h"
 
 namespace Jerry
 {
@@ -45,6 +46,26 @@ namespace Jerry
     {
         return glfwWindowShouldClose(m_window);
     }
+    VkSurfaceKHR WindowSystem::create_surface(RHI::Instance &instance) noexcept
+    {
+
+        if (instance.get_handle() == VK_NULL_HANDLE || !m_window)
+        {
+            return VK_NULL_HANDLE;
+        }
+
+        VkSurfaceKHR surface;
+
+        VkResult errCode = glfwCreateWindowSurface(instance.get_handle(), m_window, NULL, &surface);
+
+        if (errCode != VK_SUCCESS)
+        {
+            return nullptr;
+        }
+
+        return surface;
+    }
+
     void WindowSystem::setFocusMode(bool mode)
     {
         m_isFocusMode = mode;

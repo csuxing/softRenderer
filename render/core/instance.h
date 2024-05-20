@@ -8,8 +8,8 @@
 
 #include "physical_device.h"
 namespace RHI
-{
-	class Instance
+{	
+	class Instance : public std::enable_shared_from_this<Instance>
 	{
 	public:
 		/**
@@ -27,6 +27,10 @@ namespace RHI
 			bool                                          headless = false,
 			uint32_t                                      api_version = VK_API_VERSION_1_0);
 
+		std::shared_ptr<Instance> getshardFromThis()
+		{
+			return shared_from_this();
+		}
 		/**
 		 * @brief Queries the GPUs of a VkInstance that is already created
 		 * @param instance A valid VkInstance

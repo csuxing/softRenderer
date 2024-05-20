@@ -1,6 +1,12 @@
 #ifndef _global_context_H_H_
 #define _global_context_H_H_
 #include <memory>
+#include <volk.h>
+
+namespace RHI
+{
+    class Instance;
+}
 namespace Jerry
 {
     class LogSystem;
@@ -20,6 +26,9 @@ namespace Jerry
         // load vulkan library && function pointer
         void initVulkan();
     private:
+        std::shared_ptr<RHI::Instance> m_instance;
+        VkSurfaceKHR m_surface{ VK_NULL_HANDLE };
+
         GlobalContext() = default;
         ~GlobalContext();
     };

@@ -4,7 +4,13 @@
 #include <vector>
 
 #include <GLFW/glfw3.h>
+#include <volk.h>
 
+namespace RHI
+{
+    class Instance;
+
+}
 namespace Jerry
 {
     struct WindowCreateInfo
@@ -25,7 +31,8 @@ namespace Jerry
         void pollEvents() const;
         bool shouldClose() const;
         void setFocusMode(bool mode);
-        
+        VkSurfaceKHR create_surface(RHI::Instance& instance) noexcept;
+
         // declare function
         typedef std::function<void()>                   onResetFunc;
         typedef std::function<void(int, int, int, int)> onKeyFunc;

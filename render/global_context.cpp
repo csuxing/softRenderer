@@ -1,4 +1,5 @@
 #include <volk.h>
+#include "glfw/glfw3.h"
 
 #include "global_context.h"
 #include "log_system.h"
@@ -17,9 +18,14 @@ namespace Jerry
             LOG_FATAL("vulkan init faild£¡");
         }
         // init instance
-        std::unordered_map<const char*, bool> temp;
+        std::unordered_map<const char*, bool> temp{ {"VK_EXT_debug_utils", true}, {"VK_KHR_win32_surface", true}};
         std::vector<const char*> temp1;
-        std::shared_ptr<RHI::Instance> instance = std::make_shared<RHI::Instance>("", temp, temp1);
+        m_instance = std::make_shared<RHI::Instance>("", temp, temp1);
+        //create surface
+        m_surface = m_windowSystem->create_surface(*(m_instance.get()));
+        // select physical gpu
+        auto& gpu = m_instance->get_suitable_gpu(m_surface);
+
     }
     void GlobalContext::startSystems()
     {
