@@ -296,6 +296,7 @@ namespace RHI
                 }
             }
         }
+        return *(gpus[0]);
     }
     bool Instance::is_enabled(const char* extension) const
     {

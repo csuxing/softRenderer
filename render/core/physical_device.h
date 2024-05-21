@@ -23,7 +23,7 @@ namespace RHI
         {
             return properties;
         }
-        std::vector<VkQueueFamilyProperties> getQueueFamilyProperties() noexcept
+        const std::vector<VkQueueFamilyProperties>& getQueueFamilyProperties() const noexcept
         {
             return queue_family_properties;
         }
