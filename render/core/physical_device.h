@@ -27,7 +27,19 @@ namespace RHI
         {
             return queue_family_properties;
         }
-        bool isPresentSupported(VkSurfaceKHR surface, uint32_t queueIndex) noexcept;
+        bool isPresentSupported(VkSurfaceKHR surface, uint32_t queueIndex) const noexcept;
+        VkPhysicalDevice getHandle() const noexcept
+        {
+            return m_handle;
+        }
+        VkPhysicalDeviceFeatures getFeature() const noexcept
+        {
+            return m_requestFeatures;
+        }
+        std::shared_ptr<Instance> getInstance() const noexcept
+        {
+            return m_instance;
+        }
     private:
         // Handle to the Vulkan instance
         std::shared_ptr<Instance> m_instance;
@@ -41,6 +53,8 @@ namespace RHI
         VkPhysicalDeviceMemoryProperties memory_properties;
         // The GPU queue family properties
         std::vector<VkQueueFamilyProperties> queue_family_properties;
+
+        VkPhysicalDeviceFeatures m_requestFeatures{};
     };
 }
 

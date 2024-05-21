@@ -19,7 +19,7 @@ namespace RHI
 
 
     }
-    bool PhysicalDevice::isPresentSupported(VkSurfaceKHR surface, uint32_t queueIndex) noexcept
+    bool PhysicalDevice::isPresentSupported(VkSurfaceKHR surface, uint32_t queueIndex) const noexcept
     {
         VkBool32 present_supported{ VK_FALSE };
 

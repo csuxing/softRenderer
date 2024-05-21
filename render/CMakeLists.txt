@@ -13,6 +13,16 @@ set(CORE_FILES
     core/physical_device.cpp
     core/vulkan_resource.h
     core/vulkan_resource.cpp
+    core/queue.h
+    core/queue.cpp
+    core/command_pool.h
+    core/command_pool.cpp
+    core/fence_pool.h
+    core/fence_pool.cpp
+    core/command_buffer.h
+    core/command_buffer.cpp
+    core/render_frame.h
+    core/render_frame.cpp
 )
 
 # find other files

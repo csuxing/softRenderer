@@ -7,6 +7,9 @@
 
 #include "physical_device.h"
 #include "vulkan_resource.h"
+#include "queue.h"
+#include "command_pool.h"
+#include "fence_pool.h"
 namespace RHI
 {
     struct DriverVersion
@@ -24,11 +27,18 @@ namespace RHI
             std::unordered_map<const char*, bool> requested_extensions = {});
 
         uint32_t get_queue_family_index(VkQueueFlagBits queue_flag);
+        bool isExtensionSupported(const std::string& extension) const;
+        const Queue& getQueueByFlags(VkQueueFlags queue_flags, uint32_t queue_index) const;
     protected:
 
     private:
-        const PhysicalDevice& m_gpu;
-        VmaAllocator m_memoryAllocator{ VK_NULL_HANDLE };
+        std::vector<VkExtensionProperties>  m_deviceExtensions;
+        std::vector<const char*>            m_enabledExtensions;
+        const PhysicalDevice&               m_gpu;
+        VmaAllocator                        m_memoryAllocator{ VK_NULL_HANDLE };
+        std::vector<std::vector<Queue>>     m_queues;
+        std::unique_ptr<CommandPool>        m_commandPool{};
+        std::unique_ptr<FencePool>          m_fencePool{};
     };
 }
 
