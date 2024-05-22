@@ -4,7 +4,7 @@ project(softRenderer)
 set(UTILS_DIR "${CMAKE_SOURCE_DIR}/utils")
 
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}//output")
-
+ 
 # use folder
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -33,7 +33,6 @@ file(GLOB SOURCES *.h *.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES}) 
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-target_link_libraries(${PROJECT_NAME} PRIVATE vma)
 target_link_libraries(${PROJECT_NAME} PRIVATE math)
 target_link_libraries(${PROJECT_NAME} PRIVATE utils)
 target_link_libraries(${PROJECT_NAME} PRIVATE platform)

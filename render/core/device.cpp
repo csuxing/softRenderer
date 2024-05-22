@@ -117,20 +117,25 @@ namespace RHI
         vma_vulkan_func.vkUnmapMemory = vkUnmapMemory;
         vma_vulkan_func.vkCmdCopyBuffer = vkCmdCopyBuffer;
 
+        vma_vulkan_func.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
+        vma_vulkan_func.vkGetDeviceProcAddr = vkGetDeviceProcAddr;
+
         VmaAllocatorCreateInfo allocator_info{};
         allocator_info.physicalDevice = m_gpu.getHandle();
         allocator_info.device = m_handle;
         allocator_info.instance = m_gpu.getInstance()->get_handle();
 
         allocator_info.pVulkanFunctions = &vma_vulkan_func;
-        result /*= vmaCreateAllocator(&allocator_info, &m_memoryAllocator)*/;
+        result = vmaCreateAllocator(&allocator_info, &m_memoryAllocator);
         if (result != VK_SUCCESS)
         {
             throw std::runtime_error{ "Cannot create allocator" };
         }
         // create commandPool && fencePool
         m_commandPool = std::make_unique<CommandPool>(*this, getQueueByFlags(VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT, 0).getFamilyIndex());
-    }
+        m_fencePool   = std::make_unique<FencePool>(*this);
+        LOG_DEBUG("Device init successful!!!");
+}
 
     uint32_t RHI::Device::get_queue_family_index(VkQueueFlagBits queue_flag)
     {

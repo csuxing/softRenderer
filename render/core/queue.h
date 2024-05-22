@@ -18,12 +18,12 @@ namespace RHI{
     protected:
 
     private:
-        Device& m_device;
-        VkQueue m_handle{ VK_NULL_HANDLE };
-        uint32_t m_familyIndex{ 0 };
-        uint32_t m_index{ 0 };
-        VkBool32 m_canPresent{ VK_FALSE };
-        VkQueueFamilyProperties m_properties{};
+        Device&                         m_device;
+        VkQueue                         m_handle{ VK_NULL_HANDLE };
+        uint32_t                        m_familyIndex{ 0 };
+        uint32_t                        m_index{ 0 };
+        VkBool32                        m_canPresent{ VK_FALSE };
+        VkQueueFamilyProperties         m_properties{};
     };
 }
 

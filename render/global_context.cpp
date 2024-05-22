@@ -37,6 +37,7 @@ namespace Jerry
         }
         // create device
         m_device = std::make_shared<RHI::Device>(gpu, m_surface, getDeviceExtensions());
+
     }
     void GlobalContext::startSystems()
     {
