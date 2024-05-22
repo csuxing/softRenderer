@@ -29,6 +29,10 @@ namespace RHI
         uint32_t get_queue_family_index(VkQueueFlagBits queue_flag);
         bool isExtensionSupported(const std::string& extension) const;
         const Queue& getQueueByFlags(VkQueueFlags queue_flags, uint32_t queue_index) const;
+        const PhysicalDevice& getGpu() const noexcept
+        {
+            return m_gpu;
+        }
     protected:
 
     private:

@@ -49,6 +49,10 @@ set(PROJECT_FILES
     ${SOURCES}
 )
 
+set(CORE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/core)
+set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/rendering)
+set(RENDER_PATH ${CMAKE_SOURCE_DIR}/render)
+
 source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
 source_group("rendering\\" FILES ${RENDERING_FILES})
@@ -59,6 +63,7 @@ add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
 # include header files
 include_directories(${UTILS_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/vma/include)
+include_directories(${RENDER_PATH})
 
 # link library
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
