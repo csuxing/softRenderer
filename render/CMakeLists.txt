@@ -6,6 +6,7 @@ set(CORE_FILES
     core/error.h
     core/error.cpp
     core/helpers.h
+    core/helpers.cpp
     core/instance.h
     core/instance.cpp
     core/device.h
@@ -52,6 +53,7 @@ set(PROJECT_FILES
 set(CORE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/core)
 set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/rendering)
 set(RENDER_PATH ${CMAKE_SOURCE_DIR}/render)
+set(PLATFORM_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/platform)
 
 source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
@@ -64,6 +66,7 @@ add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
 include_directories(${UTILS_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/vma/include)
 include_directories(${RENDER_PATH})
+include_directories(${PLATFORM_INCLUDE_PATH})
 
 # link library
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)

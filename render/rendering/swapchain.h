@@ -30,6 +30,10 @@ namespace RHI
         // get && set
         const std::vector<VkPresentModeKHR>&    getPresentModeList() const { return m_presentModePriorityList; }
         const std::vector<VkSurfaceFormatKHR>&  getSurfaceFormatList() const { return m_surfaceFormatPriorityList; }
+        const uint32_t getImageCount() const { return m_imageCount; }
+        const VkSurfaceFormatKHR getSurfaceFormat() const { return m_currentUse; }
+        const std::vector<VkImageView>& getImageView() const { return m_swapChainImageViews; }
+        const VkExtent2D getExtent2D() const { return m_extent; }
     private:
         VkSwapchainKHR                      m_swapchain{ VK_NULL_HANDLE };
         Device&                             m_device;
@@ -43,7 +47,10 @@ namespace RHI
         std::vector<VkSurfaceFormatKHR>     m_surfaceFormats{};
         std::vector<VkPresentModeKHR>       m_presentModes{};
         VkSwapchainKHR                      m_handle{};
+        VkSurfaceFormatKHR                  m_currentUse;
 
+        std::vector<VkImage>                m_swapChainImages;
+        std::vector<VkImageView>            m_swapChainImageViews;
         // preDefine
         std::vector<VkPresentModeKHR> m_presentModePriorityList = {
             VK_PRESENT_MODE_FIFO_KHR,

@@ -33,6 +33,8 @@ namespace Jerry
         void setFocusMode(bool mode);
         VkSurfaceKHR create_surface(RHI::Instance& instance) noexcept;
 
+        GLFWwindow* getWindow() { return m_window; }
+
         // declare function
         typedef std::function<void()>                   onResetFunc;
         typedef std::function<void(int, int, int, int)> onKeyFunc;

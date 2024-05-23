@@ -8,6 +8,7 @@ namespace RHI
 {
     class Instance;
     class Device;
+    class RenderContext;
 }
 namespace Jerry
 {
@@ -40,9 +41,10 @@ namespace Jerry
             m_instanceExtensions.insert({ extension, true });
         }
     private:
-        std::shared_ptr<RHI::Instance> m_instance;
-        std::shared_ptr<RHI::Device>   m_device;
-        VkSurfaceKHR m_surface{ VK_NULL_HANDLE };
+        std::shared_ptr<RHI::Instance>  m_instance;
+        std::shared_ptr<RHI::Device>    m_device;
+        RHI::RenderContext*             m_renderContext;
+        VkSurfaceKHR                    m_surface{ VK_NULL_HANDLE };
         /** @brief Set of device extensions to be enabled for this example and whether they are optional (must be set in the derived constructor) */
         std::unordered_map<const char*, bool> m_deviceExtensions;
         /** @brief Set of instance extensions to be enabled for this example and whether they are optional (must be set in the derived constructor) */

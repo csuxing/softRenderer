@@ -1,7 +1,7 @@
 #ifndef _HELPERS_H_H_
 #define _HELPERS_H_H_
 #include <stdint.h>
-
+#include <volk.h>
 template <class T>
 uint32_t to_u32(T value)
 {
@@ -14,5 +14,7 @@ uint32_t to_u32(T value)
 
     return static_cast<uint32_t>(value);
 }
+
+VkShaderModule loadShader(const char* fileName, VkDevice device);
 
 #endif

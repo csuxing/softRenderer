@@ -7,6 +7,7 @@
 #include "macro.h"
 #include "core/instance.h"
 #include "core/device.h"
+#include "rendering/render_context.h"
 
 namespace Jerry
 {
@@ -37,7 +38,8 @@ namespace Jerry
         }
         // create device
         m_device = std::make_shared<RHI::Device>(gpu, m_surface, getDeviceExtensions());
-
+        m_renderContext = new RHI::RenderContext(*(m_device.get()), m_surface, m_windowSystem->getWindow());
+        m_renderContext->init();
     }
     void GlobalContext::startSystems()
     {
