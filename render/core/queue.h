@@ -15,6 +15,7 @@ namespace RHI{
         {
             return m_familyIndex;
         }
+        const VkQueue getHandle() const { return m_handle; }
     protected:
 
     private:

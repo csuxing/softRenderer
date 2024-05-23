@@ -66,11 +66,112 @@ namespace RHI
     }
     void RenderContext::beginFrame()
     {
+        VkSemaphore acquire_semaphore;
+        if (m_recycledSemaphores.empty())
+        {
+            VkSemaphoreCreateInfo info = { VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
+            VK_CHECK(vkCreateSemaphore(m_device.get_handle(), &info, nullptr, &acquire_semaphore));
+        }
+        else
+        {
+            acquire_semaphore = m_recycledSemaphores.back();
+            m_recycledSemaphores.pop_back();
+        }
+        VkResult res = vkAcquireNextImageKHR(m_device.get_handle(), m_swapChain->getHandle(), UINT64_MAX, acquire_semaphore, VK_NULL_HANDLE, &m_currentIndex);
+        if (res != VK_SUCCESS)
+        {
+            m_recycledSemaphores.push_back(acquire_semaphore);
+            return;
+        }
 
+        if (m_perframes[m_currentIndex].queue_submit_fence != VK_NULL_HANDLE)
+        {
+            vkWaitForFences(m_device.get_handle(), 1, &m_perframes[m_currentIndex].queue_submit_fence, true, UINT64_MAX);
+            vkResetFences(m_device.get_handle(), 1, &m_perframes[m_currentIndex].queue_submit_fence);
+        }
+
+        if (m_perframes[m_currentIndex].primary_command_pool != VK_NULL_HANDLE)
+        {
+            vkResetCommandPool(m_device.get_handle(), m_perframes[m_currentIndex].primary_command_pool, 0);
+        }
+
+        VkSemaphore old_semaphore = m_perframes[m_currentIndex].swapchain_acquire_semaphore;
+        if (old_semaphore != VK_NULL_HANDLE)
+        {
+            m_recycledSemaphores.push_back(old_semaphore);
+        }
+        m_perframes[m_currentIndex].swapchain_acquire_semaphore = acquire_semaphore;
+
+        return;
+    }
+    void RenderContext::frame()
+    {
+        VkFramebuffer& framebuffer = m_frameBuffers[m_currentIndex];
+
+        VkCommandBuffer& cmd = m_perframes[m_currentIndex].primary_command_buffer;
+        VkCommandBufferBeginInfo begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+        begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        vkBeginCommandBuffer(cmd, &begin_info);
+        VkClearValue clear_value;
+        clear_value.color = { {0.01f, 0.01f, 0.033f, 1.0f} };
+        VkRenderPassBeginInfo rp_begin{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+        rp_begin.renderPass = m_renderpass;
+        rp_begin.framebuffer = framebuffer;
+        rp_begin.renderArea.extent.width = m_swapChain->getExtent2D().width;
+        rp_begin.renderArea.extent.height = m_swapChain->getExtent2D().height;
+        rp_begin.clearValueCount = 1;
+        rp_begin.pClearValues = &clear_value;
+        // We will add draw commands in the same command buffer.
+        vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+        VkViewport vp{};
+        vp.width = static_cast<float>(m_swapChain->getExtent2D().width);
+        vp.height = static_cast<float>(m_swapChain->getExtent2D().height);
+        vp.minDepth = 0.0f;
+        vp.maxDepth = 1.0f;
+        // Set viewport dynamically
+        vkCmdSetViewport(cmd, 0, 1, &vp);
+
+        VkRect2D scissor{};
+        scissor.extent.width = m_swapChain->getExtent2D().width;
+        scissor.extent.height = m_swapChain->getExtent2D().height;
+        // Set scissor dynamically
+        vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+        vkCmdDraw(cmd, 3, 1, 0, 0);
+        vkCmdEndRenderPass(cmd);
+        VK_CHECK(vkEndCommandBuffer(cmd));
     }
     void RenderContext::endFrame()
     {
+        VkCommandBuffer& cmd = m_perframes[m_currentIndex].primary_command_buffer;
+        if (m_perframes[m_currentIndex].swapchain_release_semaphore == VK_NULL_HANDLE)
+        {
+            VkSemaphoreCreateInfo semaphore_info{ VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
+            VK_CHECK(vkCreateSemaphore(m_device.get_handle(), &semaphore_info, nullptr,
+                &m_perframes[m_currentIndex].swapchain_release_semaphore));
+        }
+        VkPipelineStageFlags wait_stage{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        VkSubmitInfo info{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+        info.commandBufferCount = 1;
+        info.pCommandBuffers = &cmd;
+        info.waitSemaphoreCount = 1;
+        info.pWaitSemaphores = &m_perframes[m_currentIndex].swapchain_acquire_semaphore;
+        info.pWaitDstStageMask = &wait_stage;
+        info.signalSemaphoreCount = 1;
+        info.pSignalSemaphores = &m_perframes[m_currentIndex].swapchain_release_semaphore;
+        // Submit command buffer to graphics queue
+        VK_CHECK(vkQueueSubmit(m_device.getQueueByFlags(VK_QUEUE_GRAPHICS_BIT, 0).getHandle(), 1, &info, m_perframes[m_currentIndex].queue_submit_fence));
 
+        VkPresentInfoKHR present{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
+        present.swapchainCount = 1;
+        auto handle = m_swapChain->getHandle();
+        present.pSwapchains = &handle;
+        present.pImageIndices = &m_currentIndex;
+        present.waitSemaphoreCount = 1;
+        present.pWaitSemaphores = &m_perframes[m_currentIndex].swapchain_release_semaphore;
+        // Present swapchain image
+        vkQueuePresentKHR(m_device.getQueueByFlags(VK_QUEUE_GRAPHICS_BIT, 0).getHandle(), &present);
     }
 
     void RenderContext::initRenderpass()

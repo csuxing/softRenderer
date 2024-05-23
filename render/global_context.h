@@ -24,7 +24,9 @@ namespace Jerry
 
         std::shared_ptr<LogSystem> m_loggerSystem;
         std::shared_ptr<WindowSystem> m_windowSystem;
-
+        void beginFrame();
+        void frame();
+        void endFrame();
     protected:
         // load vulkan library && function pointer
         void initVulkan();

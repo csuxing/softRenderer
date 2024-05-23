@@ -62,6 +62,18 @@ namespace Jerry
         static GlobalContext instance;
         return &instance;
     }
+    void GlobalContext::beginFrame()
+    {
+        m_renderContext->beginFrame();
+    }
+    void GlobalContext::frame()
+    {
+        m_renderContext->frame();
+    }
+    void GlobalContext::endFrame()
+    {
+        m_renderContext->endFrame();
+    }
     GlobalContext::~GlobalContext()
     {
         

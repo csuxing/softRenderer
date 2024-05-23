@@ -33,6 +33,7 @@ namespace RHI
         void init();
         void submit(CommandBuffer& commandBuffer);
         void beginFrame();
+        void frame();
         void endFrame();
 
     protected:
@@ -50,8 +51,9 @@ namespace RHI
         std::vector<VkFramebuffer>  m_frameBuffers{};
         VkPipelineLayout            m_pipelineLayout{};
         VkPipeline                  m_pipeline{};
-        std::vector<PerFrame> m_perframes;
-
+        std::vector<PerFrame>       m_perframes;
+        std::vector<VkSemaphore>    m_recycledSemaphores;
+        uint32_t                    m_currentIndex{0};
     };
 }
 

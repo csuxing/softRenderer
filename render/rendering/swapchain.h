@@ -34,6 +34,7 @@ namespace RHI
         const VkSurfaceFormatKHR getSurfaceFormat() const { return m_currentUse; }
         const std::vector<VkImageView>& getImageView() const { return m_swapChainImageViews; }
         const VkExtent2D getExtent2D() const { return m_extent; }
+        const VkSwapchainKHR getHandle() const { return m_handle; }
     private:
         VkSwapchainKHR                      m_swapchain{ VK_NULL_HANDLE };
         Device&                             m_device;

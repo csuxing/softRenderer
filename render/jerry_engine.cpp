@@ -41,6 +41,13 @@ namespace Jerry
         tickRender();
         return true;
     }
+    void JerryEngine::tickRender()
+    {
+        auto globalContext = GlobalContext::getInstance();
+        globalContext->beginFrame();
+        globalContext->frame();
+        globalContext->endFrame();
+    }
     float JerryEngine::calculateDeltaTime()
     {
         float deltaTime{};
