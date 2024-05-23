@@ -3,7 +3,7 @@
 
 #include "error.h"
 #include "helpers.h"
-#include "../macro.h"
+#include "macro.h"
 namespace RHI
 {
     bool validate_layers(const std::vector<const char*>& required,
