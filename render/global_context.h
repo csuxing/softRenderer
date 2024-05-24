@@ -4,6 +4,10 @@
 #include <unordered_map>
 #include <volk.h>
 
+#ifdef RENDER_DOC
+#include "renderdoc_app.h"
+#endif
+
 namespace RHI
 {
     class Instance;
@@ -52,7 +56,10 @@ namespace Jerry
         std::unordered_map<const char*, bool> m_deviceExtensions;
         /** @brief Set of instance extensions to be enabled for this example and whether they are optional (must be set in the derived constructor) */
         std::unordered_map<const char*, bool> m_instanceExtensions;
-
+#ifdef RENDER_DOC
+        void initRenderDoc();
+        RENDERDOC_API_1_1_2* rdoc_api{};
+#endif
         GlobalContext() = default;
         ~GlobalContext();
     };

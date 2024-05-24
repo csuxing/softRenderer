@@ -1,6 +1,5 @@
 #include <volk.h>
 #include "glfw/glfw3.h"
-
 #include "global_context.h"
 #include "log_system.h"
 #include "window_system.h"
@@ -8,6 +7,14 @@
 #include "core/instance.h"
 #include "core/device.h"
 #include "rendering/render_context.h"
+
+#ifdef RENDER_DOC
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#define RC_INVOKED
+#define _X86_
+#include <libloaderapi.h>
+#endif
 
 namespace Jerry
 {
@@ -43,6 +50,9 @@ namespace Jerry
     }
     void GlobalContext::startSystems()
     {
+#ifdef RENDER_DOC
+        initRenderDoc();
+#endif
         m_loggerSystem = std::make_shared<LogSystem>();
 
         m_windowSystem = std::make_shared<WindowSystem>();
@@ -62,18 +72,53 @@ namespace Jerry
         static GlobalContext instance;
         return &instance;
     }
-    void GlobalContext::beginFrame()
-    {
-        m_renderContext->beginFrame();
-    }
     void GlobalContext::frame()
     {
         m_renderContext->frame();
     }
+
+    void GlobalContext::beginFrame()
+    {
+#ifdef RENDER_DOC
+        if (rdoc_api)
+        {
+            auto pointer = RENDERDOC_DEVICEPOINTER_FROM_VKINSTANCE(m_instance->get_handle());
+            auto window = m_windowSystem->getWindow();
+            HWND hwnd = glfwGetWin32Window(window);
+            rdoc_api->StartFrameCapture(pointer, hwnd);
+        }
+#endif
+        m_renderContext->beginFrame();
+    }
+
     void GlobalContext::endFrame()
     {
         m_renderContext->endFrame();
+#ifdef RENDER_DOC
+        if (rdoc_api)
+        {
+            auto pointer = RENDERDOC_DEVICEPOINTER_FROM_VKINSTANCE(m_instance->get_handle());
+            auto window = m_windowSystem->getWindow();
+            HWND hwnd = glfwGetWin32Window(window);
+            rdoc_api->EndFrameCapture(pointer, hwnd);
+        }
+#endif
     }
+#ifdef RENDER_DOC
+    void GlobalContext::initRenderDoc()
+    {
+        HINSTANCE hDllInst = LoadLibrary("renderdoc.dll");
+        HMODULE mod = GetModuleHandleA("renderdoc.dll");
+
+        if (mod)
+        {
+            pRENDERDOC_GetAPI RENDERDOC_GetAPI =
+                (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
+            int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_5_0, (VOID**)&rdoc_api);
+            assert(ret == 1);
+        }
+    }
+#endif
     GlobalContext::~GlobalContext()
     {
         
