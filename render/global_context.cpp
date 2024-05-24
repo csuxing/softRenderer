@@ -50,12 +50,14 @@ namespace Jerry
     }
     void GlobalContext::startSystems()
     {
-#ifdef RENDER_DOC
-        initRenderDoc();
-#endif
         m_loggerSystem = std::make_shared<LogSystem>();
 
         m_windowSystem = std::make_shared<WindowSystem>();
+
+#ifdef RENDER_DOC
+        initRenderDoc();
+#endif
+
         // it can read from configue && create window
         WindowCreateInfo create_info{};
         m_windowSystem->initalize(create_info);
@@ -108,14 +110,15 @@ namespace Jerry
     void GlobalContext::initRenderDoc()
     {
         HMODULE mod = GetModuleHandleA("renderdoc.dll");
-
+        
         if (mod)
         {
             pRENDERDOC_GetAPI RENDERDOC_GetAPI =
                 (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
             int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_5_0, (VOID**)&rdoc_api);
-            assert(ret == 1);
+            // assert(ret == 1);
         }
+        LOG_DEBUG("render doc init!");
     }
 #endif
     GlobalContext::~GlobalContext()

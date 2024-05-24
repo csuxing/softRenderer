@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <volk.h>
 
-#define RENDER_DOC
 #ifdef RENDER_DOC
 #include "renderdoc_app.h"
 #endif

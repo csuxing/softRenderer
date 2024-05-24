@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 project(render LANGUAGES C CXX)
 
+# add macro
+if(USE_RENDER_DOC)
+    add_definitions(-DRENDER_DOC)
+endif()
+
 # set core files
 set(CORE_FILES 
     core/error.h
@@ -54,6 +59,7 @@ set(CORE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/core)
 set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/rendering)
 set(RENDER_PATH ${CMAKE_SOURCE_DIR}/render)
 set(PLATFORM_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/platform)
+set(RENDER_DOC ${CMAKE_SOURCE_DIR}/thirdParty/renderdoc)
 
 source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
@@ -67,6 +73,7 @@ include_directories(${UTILS_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/thirdParty/vma/include)
 include_directories(${RENDER_PATH})
 include_directories(${PLATFORM_INCLUDE_PATH})
+include_directories(${RENDER_DOC})
 
 # link library
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
