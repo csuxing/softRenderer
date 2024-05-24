@@ -107,7 +107,6 @@ namespace Jerry
 #ifdef RENDER_DOC
     void GlobalContext::initRenderDoc()
     {
-        HINSTANCE hDllInst = LoadLibrary("renderdoc.dll");
         HMODULE mod = GetModuleHandleA("renderdoc.dll");
 
         if (mod)
