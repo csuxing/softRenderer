@@ -48,12 +48,19 @@ set(RENDERING_FILES
     rendering/render_frame.cpp
 )
 
+set(APP_FILES
+    app/device_manager.h
+    app/device_manager.cpp
+    app/vk_device_manager.h
+    app/vk_device_manager.cpp
+)
 # find other files
 file(GLOB SOURCES *.h *.cpp)
 
 set(PROJECT_FILES
     ${CORE_FILES}
     ${RENDERING_FILES}
+    ${APP_FILES}
     ${SOURCES}
 )
 
@@ -66,6 +73,7 @@ set(RENDER_DOC ${CMAKE_SOURCE_DIR}/thirdParty/renderdoc)
 source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
 source_group("rendering\\" FILES ${RENDERING_FILES})
+source_group("app\\" FILES ${APP_FILES})
 
 # generate lib, not exe
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
