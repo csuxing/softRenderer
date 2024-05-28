@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(render LANGUAGES C CXX)
+project(framework LANGUAGES C CXX)
 
 # add macro
 if(USE_RENDER_DOC)
@@ -10,6 +10,8 @@ endif()
 set(CORE_FILES 
     core/error.h
     core/error.cpp
+    core/debug.h
+    core/debug.cpp
     core/helpers.h
     core/helpers.cpp
     core/instance.h
@@ -55,9 +57,9 @@ set(PROJECT_FILES
     ${SOURCES}
 )
 
-set(CORE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/core)
-set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/render/rendering)
-set(RENDER_PATH ${CMAKE_SOURCE_DIR}/render)
+set(CORE_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/framework/core)
+set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/framework/rendering)
+set(RENDER_PATH ${CMAKE_SOURCE_DIR}/framework)
 set(PLATFORM_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/platform)
 set(RENDER_DOC ${CMAKE_SOURCE_DIR}/thirdParty/renderdoc)
 
@@ -80,3 +82,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
 target_link_libraries(${PROJECT_NAME} PRIVATE utils)
 target_link_libraries(${PROJECT_NAME} PRIVATE volk)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm)
