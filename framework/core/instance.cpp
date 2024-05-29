@@ -1,6 +1,5 @@
 #include <volk.h>
 #include "instance.h"
-
 #include "error.h"
 #include "helpers.h"
 #include "macro.h"

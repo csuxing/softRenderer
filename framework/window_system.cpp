@@ -37,6 +37,15 @@ namespace Jerry
         glfwSetWindowCloseCallback(m_window, windowCloseCallback);
 
         glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+
+        uint32_t glfwExtCount;
+        const char** glfwExt = glfwGetRequiredInstanceExtensions(&glfwExtCount);
+        ASSERT(glfwExt);
+
+        for (uint32_t i = 0; i < glfwExtCount; ++i)
+        {
+            m_requiredExtensions.push_back(std::string(glfwExt[i]));
+        }
     }
     void WindowSystem::pollEvents() const
     {

@@ -5,6 +5,7 @@
 
 #include <GLFW/glfw3.h>
 #include <volk.h>
+#include <string>
 
 namespace RHI
 {
@@ -60,6 +61,7 @@ namespace Jerry
         void registerOnWindowSizeFunc(onWindowSizeFunc func) { m_onWindowSizeFunc.push_back(func); }
         void registerOnWindowCloseFunc(onWindowCloseFunc func) { m_onWindowCloseFunc.push_back(func); }
 
+        std::vector<std::string> getRequiredExtension() { return m_requiredExtensions; }
     protected:
 
         // window event callbacks
@@ -205,6 +207,8 @@ namespace Jerry
         std::vector<onDropFunc>        m_onDropFunc;
         std::vector<onWindowSizeFunc>  m_onWindowSizeFunc;
         std::vector<onWindowCloseFunc> m_onWindowCloseFunc;
+
+        std::vector<std::string>       m_requiredExtensions;
     };
 }
 

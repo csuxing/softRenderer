@@ -8,6 +8,8 @@
 #include "core/device.h"
 #include "rendering/render_context.h"
 
+#include "app/device_manager.h"
+
 #ifdef RENDER_DOC
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -61,6 +63,19 @@ namespace Jerry
         // it can read from configue && create window
         WindowCreateInfo create_info{};
         m_windowSystem->initalize(create_info);
+
+        // device manager create vulkan resource
+        auto deviceManger = APP::DeviceManager::create(APP::DeviceManager::kVk);
+        APP::DeviceCreationParameters parameters;
+        parameters.m_instanceParameters.enableDebugRuntime = true;
+        parameters.m_window = m_windowSystem->getWindow();
+        std::vector<std::string> instanceExtensions = m_windowSystem->getRequiredExtension();
+        for (auto ext : instanceExtensions)
+        {
+            parameters.m_instanceParameters.requiredVulkanInstanceExtensions.push_back(ext);
+        }
+        deviceManger->createDevice(parameters);
+
         // init vulkan
         initVulkan();
     }

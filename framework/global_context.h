@@ -32,6 +32,7 @@ namespace Jerry
         void beginFrame();
         void frame();
         void endFrame();
+        
     protected:
         // load vulkan library && function pointer
         void initVulkan();

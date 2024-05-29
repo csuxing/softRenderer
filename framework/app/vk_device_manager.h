@@ -1,49 +1,51 @@
 #ifndef _VK_DEVICE_MANAGER_H_H_
 #define _VK_DEVICE_MANAGER_H_H_
 #include "device_manager.h"
-#include <functional>
+#include <unordered_set>
 #include <volk.h>
 namespace APP
 {
-    enum ColorFromat : uint8_t
+    struct VulkanExtensionSet
     {
-        SRGBA8_UNORM
+        std::unordered_set<std::string> instance;
+        std::unordered_set<std::string> layers;
+        std::unordered_set<std::string> device;
     };
-    struct DeviceCreationParameters
+    struct GpuInfo
     {
-        InstanceParameters m_instanceParameters;
-
-        bool startMaximized             = false;
-        bool startFullscreen            = false;
-        bool allowModeSwitch            = true;
-        int windowPosX                  = -1;            // -1 means use default placement
-        int windowPosY                  = -1;
-        uint32_t backBufferWidth        = 1280;
-        uint32_t backBufferHeight       = 720;
-        uint32_t refreshRate            = 0;
-        uint32_t swapChainBufferCount   = 3;
-        ColorFromat swapChainFormat     = ColorFromat::SRGBA8_UNORM;
-        uint32_t swapChainSampleCount   = 1;
-        uint32_t swapChainSampleQuality = 0;
-        uint32_t maxFramesInFlight      = 2;
-        bool enableNvrhiValidationLayer = false;
-        bool vsyncEnabled               = false;
-        bool enableRayTracingExtensions = false; // for vulkan
-        bool enableComputeQueue         = false;
-        bool enableCopyQueue            = false;
-        int adapterIndex                = -1;
-        bool enablePerMonitorDPI        = false;
-
-        std::vector<std::string> requiredVulkanDeviceExtensions;
-        std::vector<std::string> optionalVulkanDeviceExtensions;
-        std::vector<size_t> ignoredVulkanValidationMessageLocations;
-        std::function<void(VkDeviceCreateInfo&)> deviceCreateInfoCallback;
+        VkPhysicalDevice                        handle;
+        VkPhysicalDeviceFeatures                features{};
+        VkPhysicalDeviceProperties              properties;
+        VkPhysicalDeviceMemoryProperties        memoryProperties;
+        std::vector<VkQueueFamilyProperties>    queueFamilyProperties;
     };
     class VkDeviceManager : public DeviceManager
     {
     public:
+        void createDevice(DeviceCreationParameters parameters) override;
+    protected:
+        void createInstance();
+        void createVKDevice();
+        void queryGpu();
+        void createSurface();
+    private:
+        bool validateInstanceExtensionAndLayer();
 
+        DeviceCreationParameters        m_deviceCreationParameters{};
 
+        bool                            m_instanceCreated{ false };
+        VulkanExtensionSet              m_requiredExtension;
+        VulkanExtensionSet              m_optionalExtension; // instance extensions && layer && device extensions in current PC
+
+        VkInstance                      m_instance{ VK_NULL_HANDLE };
+        std::vector<GpuInfo>            m_gpus;
+        VkDevice                        m_VulkanDevice{VK_NULL_HANDLE};
+        VkSurfaceKHR                    m_surface;
+
+        VkQueue                         m_GraphicsQueue{VK_NULL_HANDLE};
+        VkQueue                         m_ComputeQueue{VK_NULL_HANDLE};
+        VkQueue                         m_TransferQueue{VK_NULL_HANDLE};
+        VkQueue                         m_PresentQueue{VK_NULL_HANDLE};
     };
 }
 
