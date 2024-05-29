@@ -2,6 +2,7 @@
 #define _VK_DEVICE_MANAGER_H_H_
 #include "device_manager.h"
 #include <unordered_set>
+#include <vector>
 #include <volk.h>
 namespace APP
 {
@@ -26,8 +27,11 @@ namespace APP
     protected:
         void createInstance();
         void createVKDevice();
+
         void queryGpu();
         void createSurface();
+        void pickPhysicalDevice();
+        void createLogicalDevice();
     private:
         bool validateInstanceExtensionAndLayer();
 
@@ -36,11 +40,12 @@ namespace APP
         bool                            m_instanceCreated{ false };
         VulkanExtensionSet              m_requiredExtension;
         VulkanExtensionSet              m_optionalExtension; // instance extensions && layer && device extensions in current PC
+        std::vector<GpuInfo>            m_gpus;
 
         VkInstance                      m_instance{ VK_NULL_HANDLE };
-        std::vector<GpuInfo>            m_gpus;
         VkDevice                        m_VulkanDevice{VK_NULL_HANDLE};
         VkSurfaceKHR                    m_surface;
+        uint32_t                        m_currentGpuIndex{};
 
         VkQueue                         m_GraphicsQueue{VK_NULL_HANDLE};
         VkQueue                         m_ComputeQueue{VK_NULL_HANDLE};

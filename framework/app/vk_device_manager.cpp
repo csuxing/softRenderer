@@ -118,6 +118,7 @@ namespace APP
     {
         queryGpu();
         createSurface();
+        pickPhysicalDevice();
     }
 
     void VkDeviceManager::queryGpu()
@@ -153,13 +154,41 @@ namespace APP
         ASSERT(m_deviceCreationParameters.m_window && "window nust not be nullptr");
         if (m_instance == VK_NULL_HANDLE)
         {
-            return ;
+            LOG_DEBUG("instance iis nullptr!");
+            return;
         }
 
         VkResult errCode = glfwCreateWindowSurface(m_instance, m_deviceCreationParameters.m_window, NULL, &m_surface);
         if (errCode != VK_SUCCESS)
         {
+            LOG_DEBUG("create surface failed!");
             return;
+        }
+    }
+
+    void VkDeviceManager::pickPhysicalDevice()
+    {
+        ASSERT(!m_gpus.empty() && "no physical devices were found on the system.");
+        ASSERT(m_surface && "surface should not be nullptr!");
+        // find a discrete GPU
+        size_t physicalDeviceCount = m_gpus.size();
+        for (size_t i = 0; i < physicalDeviceCount; ++i)
+        {
+            auto& gpu = m_gpus[i];
+            if (gpu.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+            {
+                size_t queueCount = gpu.queueFamilyProperties.size();
+                for (uint32_t queueIndex = 0; queueIndex < queueCount; ++queueIndex)
+                {
+                    VkBool32 present_supported{ VK_FALSE };
+                    VK_CHECK(vkGetPhysicalDeviceSurfaceSupportKHR(gpu.handle, queueIndex, m_surface, &present_supported));
+                    if (present_supported)
+                    {
+                        m_currentGpuIndex = i;
+                        return;
+                    }
+                }
+            }
         }
     }
 

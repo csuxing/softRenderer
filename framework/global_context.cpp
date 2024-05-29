@@ -74,6 +74,7 @@ namespace Jerry
         {
             parameters.m_instanceParameters.requiredVulkanInstanceExtensions.push_back(ext);
         }
+        parameters.requiredVulkanDeviceExtensions.push_back("VK_KHR_swapchain");
         deviceManger->createDevice(parameters);
 
         // init vulkan
