@@ -171,8 +171,8 @@ namespace APP
         ASSERT(!m_gpus.empty() && "no physical devices were found on the system.");
         ASSERT(m_surface && "surface should not be nullptr!");
         // find a discrete GPU
-        size_t physicalDeviceCount = m_gpus.size();
-        for (size_t i = 0; i < physicalDeviceCount; ++i)
+        uint32_t physicalDeviceCount = to_u32(m_gpus.size());
+        for (uint32_t i = 0; i < physicalDeviceCount; ++i)
         {
             auto& gpu = m_gpus[i];
             if (gpu.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
@@ -185,11 +185,24 @@ namespace APP
                     if (present_supported)
                     {
                         m_currentGpuIndex = i;
-                        return;
+                        break;
                     }
                 }
             }
         }
+        uint32_t deviceExtensionCount{};
+        vkEnumerateDeviceExtensionProperties(getCurrentUseGpu().handle, nullptr, &deviceExtensionCount, nullptr);
+        std::vector<VkExtensionProperties> deviceExtensions(deviceExtensionCount);
+        vkEnumerateDeviceExtensionProperties(getCurrentUseGpu().handle, nullptr, &deviceExtensionCount, deviceExtensions.data());
+
+        for (const auto& ext : deviceExtensions)
+        {
+            m_optionalExtension.device.insert(ext.extensionName);
+        }
+    }
+
+    void VkDeviceManager::createLogicalDevice()
+    {
     }
 
     bool VkDeviceManager::validateInstanceExtensionAndLayer()

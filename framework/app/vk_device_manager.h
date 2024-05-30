@@ -27,6 +27,7 @@ namespace APP
     protected:
         void createInstance();
         void createVKDevice();
+        const GpuInfo& getCurrentUseGpu() const { return m_gpus[m_currentGpuIndex]; }
 
         void queryGpu();
         void createSurface();
