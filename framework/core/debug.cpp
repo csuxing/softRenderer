@@ -1,7 +1,7 @@
 #include "debug.h"
 namespace Utils
 {
-    // TODO() : debug utils will be impl in the feature
+    // todo(xingyuhang) : debug utils will be impl in the feature
     void DebugUtilsExtDebugUtils::set_debug_name(VkDevice device, VkObjectType object_type, uint64_t object_handle, const char* name) const
     {
     }
