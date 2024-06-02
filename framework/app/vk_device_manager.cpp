@@ -35,6 +35,10 @@ namespace APP
         return VK_FALSE;
     }
 
+    VkDeviceManager::~VkDeviceManager()
+    {
+    }
+
     void VkDeviceManager::createDevice(DeviceCreationParameters parameters)
     {
         m_deviceCreationParameters = parameters;
@@ -202,7 +206,7 @@ namespace APP
         swapchainCreateInfo.clipped = VK_TRUE;
         swapchainCreateInfo.oldSwapchain = m_swapchainInfo.handle;
         VK_CHECK(vkCreateSwapchainKHR(m_logicalDevice, &swapchainCreateInfo, nullptr, &m_swapchainInfo.handle));
-
+        m_swapchainInfo.extent = capablities.currentExtent;
         uint32_t imageCount{};
         vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchainInfo.handle, &imageCount, nullptr);
         m_swapchainInfo.images.resize(imageCount);
@@ -227,21 +231,21 @@ namespace APP
             imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
             imageViewCreateInfo.subresourceRange.levelCount = 1;
             imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-            VK_CHECK(vkCreateImageView(m_logicalDevice, &imageViewCreateInfo, nullptr, &m_swapchainInfo.imageViews[i]));
+            VK_CHECK(vkCreateImageView(m_logicalDevice, &imageViewCreateInfo, nullptr, &m_swapchainInfo.imageViews[i]))
         }
     }
 
     void VkDeviceManager::queryGpu()
     {
         uint32_t physical_device_count{ 0 };
-        VK_CHECK(vkEnumeratePhysicalDevices(m_instance, &physical_device_count, nullptr));
+        VK_CHECK(vkEnumeratePhysicalDevices(m_instance, &physical_device_count, nullptr))
         if (physical_device_count < 1)
         {
             throw std::runtime_error("Couldn't find a physical device that supports Vulkan.");
         }
         std::vector<VkPhysicalDevice> gpus;
         gpus.resize(physical_device_count);
-        VK_CHECK(vkEnumeratePhysicalDevices(m_instance, &physical_device_count, gpus.data()));
+        VK_CHECK(vkEnumeratePhysicalDevices(m_instance, &physical_device_count, gpus.data()))
         m_gpus.resize(physical_device_count);
         LOG_INFO("find {} physical device", physical_device_count);
         for (size_t i = 0; i < physical_device_count; ++i)

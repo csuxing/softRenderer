@@ -8,7 +8,7 @@
 #include "core/device.h"
 #include "rendering/render_context.h"
 
-#include "app/device_manager.h"
+#include "app/vk_device_manager.h"
 
 #ifdef RENDER_DOC
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -47,8 +47,8 @@ namespace Jerry
         }
         // create device
         m_device = std::make_shared<RHI::Device>(gpu, m_surface, getDeviceExtensions());
-        m_renderContext = new RHI::RenderContext(*(m_device.get()), m_surface, m_windowSystem->getWindow());
-        m_renderContext->init();
+        //m_renderContext = new RHI::RenderContext(*(m_device.get()), m_surface, m_windowSystem->getWindow());
+        //m_renderContext->init();
     }
     void GlobalContext::startSystems()
     {
@@ -76,9 +76,10 @@ namespace Jerry
         }
         parameters.requiredVulkanDeviceExtensions.push_back("VK_KHR_swapchain");
         deviceManger->createDevice(parameters);
-
+        m_renderContext = new RHI::RenderContext(static_cast<APP::VkDeviceManager*>(deviceManger));
+        m_renderContext->init();
         // init vulkan
-        initVulkan();
+        //initVulkan();
     }
     void GlobalContext::shutdownSystem()
     {

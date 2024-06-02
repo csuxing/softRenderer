@@ -26,13 +26,23 @@ namespace APP
         VkSurfaceFormatKHR          format{ VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
         VkPresentModeKHR            presentMode{ VK_PRESENT_MODE_MAILBOX_KHR };
         VkSwapchainKHR              handle{ VK_NULL_HANDLE };
+        VkExtent2D                  extent{};
         std::vector<VkImage>        images;
         std::vector<VkImageView>    imageViews;
     };
     class VkDeviceManager : public DeviceManager
     {
     public:
+        virtual ~VkDeviceManager() override;
         void createDevice(DeviceCreationParameters parameters) override;
+
+        VkInstance getInstance() const { return m_instance; }
+        VkDevice   getDevice() const { return  m_logicalDevice; }
+        VkSurfaceKHR getSurface() const { return m_surface; }
+        SwapchainInfo getSwapchain() const { return m_swapchainInfo; }
+
+        uint32_t getGraphicsQueueFamilyIndex() const { return m_GraphicsQueueFamily; }
+        VkQueue getGraphicsQueue() const { return m_GraphicsQueue; }
     protected:
         void createInstance();
         void createVKDevice();

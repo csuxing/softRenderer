@@ -67,7 +67,10 @@ namespace APP
             kD3D12
         };
         static DeviceManager* create(GraphicsAPI api);
+
+        virtual ~DeviceManager(){};
         virtual void createDevice(DeviceCreationParameters parameters) = 0;
+
     private:
         static DeviceManager* createVK();
     };

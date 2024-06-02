@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 #include <volk.h>
-
+#include "macro.h"
 class VulkanException : public std::runtime_error
 {
 public:
@@ -25,13 +25,14 @@ private:
 	std::string error_message;
 };
 
-#define VK_CHECK(x)         \
-    {                       \
-        VkResult err = x;   \
-        if (err)            \
-        {                   \
-            abort();        \
-        }                   \
+#define VK_CHECK(x)                 \
+    {                               \
+        VkResult err = x;           \
+        if (err)                    \
+        {                           \
+            LOG_DEBUG("failed!, {}", int(err));  \
+            abort();                \
+        }                           \
     }
     
 
