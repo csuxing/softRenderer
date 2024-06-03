@@ -121,7 +121,7 @@ namespace RHI
         vkCmdSetViewport(cmd, 0, 1, &vp);
 
         VkRect2D scissor{};
-        scissor.extent.width = rp_begin.renderArea.extent.height;
+        scissor.extent.width = rp_begin.renderArea.extent.width;
         scissor.extent.height = rp_begin.renderArea.extent.height;
         // Set scissor dynamically
         vkCmdSetScissor(cmd, 0, 1, &scissor);

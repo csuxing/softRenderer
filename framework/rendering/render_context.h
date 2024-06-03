@@ -48,11 +48,11 @@ namespace RHI
         void initPipeline();
         void initFrameBuffer();
     private:
-        APP::VkDeviceManager* m_deviceManager{nullptr};
-        VkSurfaceKHR        m_surface{ VK_NULL_HANDLE };
-        VkDevice            m_device{VK_NULL_HANDLE};
-        VkQueue             m_graphicsQueue{VK_NULL_HANDLE};
-        APP::SwapchainInfo  m_swapchainInfo;
+        APP::VkDeviceManager*       m_deviceManager{nullptr};
+        VkSurfaceKHR                m_surface{ VK_NULL_HANDLE };
+        VkDevice                    m_device{ VK_NULL_HANDLE };
+        VkQueue                     m_graphicsQueue{ VK_NULL_HANDLE };
+        APP::SwapchainInfo          m_swapchainInfo;
 
         // temp code for primary triangle test
         VkRenderPass                m_renderpass{ VK_NULL_HANDLE };
