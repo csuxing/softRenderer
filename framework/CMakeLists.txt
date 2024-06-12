@@ -54,6 +54,20 @@ set(APP_FILES
     app/vk_device_manager.h
     app/vk_device_manager.cpp
 )
+
+set(SCENE_FILES
+    scene/scene.h
+    scene/scene.cpp
+    scene/node.h
+    scene/node.cpp
+    scene/component.h
+    scene/component.cpp
+    scene/gltf_loader.h
+    scene/gltf_loader.cpp
+    scene/submesh.h
+    scene/submesh.cpp
+)
+
 # find other files
 file(GLOB SOURCES *.h *.cpp)
 
@@ -61,6 +75,7 @@ set(PROJECT_FILES
     ${CORE_FILES}
     ${RENDERING_FILES}
     ${APP_FILES}
+    ${SCENE_FILES}
     ${SOURCES}
 )
 
@@ -74,6 +89,7 @@ source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
 source_group("rendering\\" FILES ${RENDERING_FILES})
 source_group("app\\" FILES ${APP_FILES})
+source_group("scene\\" FILES ${SCENE_FILES})
 
 # generate lib, not exe
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})
@@ -91,3 +107,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
 target_link_libraries(${PROJECT_NAME} PRIVATE utils)
 target_link_libraries(${PROJECT_NAME} PRIVATE volk)
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
+target_link_libraries(${PROJECT_NAME} PUBLIC tinygltf)

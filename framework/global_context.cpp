@@ -8,7 +8,10 @@
 #include "core/device.h"
 #include "rendering/render_context.h"
 
+#include "fileSystem.h"
 #include "app/vk_device_manager.h"
+
+#include "scene/gltf_loader.h"
 
 #ifdef RENDER_DOC
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -76,6 +79,12 @@ namespace Jerry
         }
         parameters.requiredVulkanDeviceExtensions.push_back("VK_KHR_swapchain");
         deviceManger->createDevice(parameters);
+
+        // load scene
+        Scene::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
+        std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
+        loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
+
         m_renderContext = new RHI::RenderContext(static_cast<APP::VkDeviceManager*>(deviceManger));
         m_renderContext->init();
         // init vulkan

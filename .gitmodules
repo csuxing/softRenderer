@@ -16,3 +16,6 @@
 [submodule "thirdParty/glm"]
 	path = thirdParty/glm
 	url = https://gitee.com/xing_yu_hang/glm.git
+[submodule "thirdParty/tinygltf"]
+	path = thirdParty/tinygltf
+	url = https://github.com/syoyo/tinygltf.git
