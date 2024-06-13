@@ -19,6 +19,7 @@ namespace RHI
         void flush() const;
         uint8_t* map();
         void unmap();
+        VkBuffer getHandle() const noexcept { return m_handle; }
     protected:
     private:
         APP::VkDeviceManager* m_deviceManager{};

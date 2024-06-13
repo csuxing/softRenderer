@@ -41,8 +41,8 @@ namespace RHI
         const PhysicalDevice&               m_gpu;
         VmaAllocator                        m_memoryAllocator{ VK_NULL_HANDLE };
         std::vector<std::vector<Queue>>     m_queues;
-        std::unique_ptr<CommandPool>        m_commandPool{};
-        std::unique_ptr<FencePool>          m_fencePool{};
+        //std::unique_ptr<CommandPool>        m_commandPool{};
+        //std::unique_ptr<FencePool>          m_fencePool{};
     };
 }
 

@@ -2,6 +2,10 @@
 #include "macro.h"
 #include "core/error.h"
 #include "core/helpers.h"
+#include "core/command_pool.h"
+#include "core/fence_pool.h"
+#include "core/command_buffer.h"
+
 #include <GLFW/glfw3.h>
 #include <set>
 #include <map>
@@ -55,6 +59,13 @@ namespace APP
         createInstance();
         createVKDevice();
         createSwapchain();
+        m_commandPool = new RHI::CommandPool(this, m_GraphicsQueueFamily);
+        m_fencePool = new RHI::FencePool(this);
+    }
+
+    RHI::CommandBuffer& VkDeviceManager::requestCommandBuffer()
+    {
+        return m_commandPool->requestCommandBuffer();
     }
 
     void VkDeviceManager::createInstance()
@@ -333,6 +344,16 @@ namespace APP
         }
     }
 
+    VkFence VkDeviceManager::requestFence()
+    {
+        return m_fencePool->requestFence();
+    }
+
+    VkResult VkDeviceManager::waitForFences(std::vector<VkFence> fences)
+    {
+        return vkWaitForFences(m_logicalDevice, to_u32(fences.size()), fences.data(), VK_TRUE, UINT64_MAX);
+    }
+
     void VkDeviceManager::findQueueFamilies()
     {
         const GpuInfo& GPU = getCurrentUseGpu();
@@ -393,6 +414,15 @@ namespace APP
         LOG_INFO("Compute queue family index  : {}", m_ComputeQueueFamily);
         LOG_INFO("Transfer queue family index : {}", m_TransferQueueFamily);
         LOG_INFO("Present queue family index  : {}", m_PresentQueueFamily);
+    }
+
+    VkResult VkDeviceManager::submit(VkQueue queue, const RHI::CommandBuffer& cmdBuffer, VkFence fence)
+    {
+        VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+        submitInfo.commandBufferCount = 1;
+        auto handle = cmdBuffer.getHandle();
+        submitInfo.pCommandBuffers = &handle;
+        return vkQueueSubmit(queue, 1, &submitInfo, fence);
     }
 
     void VkDeviceManager::createLogicalDevice()

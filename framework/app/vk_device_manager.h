@@ -5,6 +5,12 @@
 #include <vector>
 #include <volk.h>
 #include "vk_mem_alloc.h"
+namespace RHI
+{
+    class CommandPool;
+    class CommandBuffer;
+    class FencePool;
+}
 namespace APP
 {
     struct VulkanExtensionSet
@@ -44,6 +50,13 @@ namespace APP
 
         uint32_t getGraphicsQueueFamilyIndex() const { return m_GraphicsQueueFamily; }
         VkQueue getGraphicsQueue() const { return m_GraphicsQueue; }
+
+        RHI::CommandBuffer& requestCommandBuffer();
+        VkFence requestFence();
+
+        VkResult waitForFences(std::vector<VkFence> fences);
+
+        static VkResult submit(VkQueue queue, const RHI::CommandBuffer& cmdBuffer, VkFence fence);
     protected:
         void createInstance();
         void createVKDevice();
@@ -85,6 +98,9 @@ namespace APP
         int                             m_TransferQueueFamily = -1;
         int                             m_PresentQueueFamily = -1;
         VmaAllocator                    m_memoryAllocator{ VK_NULL_HANDLE };
+
+        RHI::CommandPool*               m_commandPool{};
+        RHI::FencePool*                 m_fencePool{};
     };
 }
 

@@ -132,8 +132,8 @@ namespace RHI
             throw std::runtime_error{ "Cannot create allocator" };
         }
         // create commandPool && fencePool
-        m_commandPool = std::make_unique<CommandPool>(*this, getQueueByFlags(VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT, 0).getFamilyIndex());
-        m_fencePool   = std::make_unique<FencePool>(*this);
+        //m_commandPool = std::make_unique<CommandPool>(*this, getQueueByFlags(VK_QUEUE_GRAPHICS_BIT | VK_QUEUE_COMPUTE_BIT, 0).getFamilyIndex());
+        //m_fencePool   = std::make_unique<FencePool>(*this);
         LOG_DEBUG("Device init successful!!!");
 }
 

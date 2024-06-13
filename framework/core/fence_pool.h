@@ -4,17 +4,21 @@
 #include <volk.h>
 #include <vector>
 
+namespace APP
+{
+    class VkDeviceManager;
+}
 namespace RHI
 {
-    class Device;
     class FencePool
     {
     public:
-        FencePool(Device& device);
+        FencePool(APP::VkDeviceManager* deviceManager);
+        VkFence requestFence();
     private:
-        Device&                     m_device;
-        std::vector<VkFence>        m_fences;
-        uint32_t                    m_activeFenceCount{ 0 };
+        APP::VkDeviceManager* m_deviceManager;
+        std::vector<VkFence>    m_fences;
+        uint32_t                m_activeFenceCount;
     };
 }
 
