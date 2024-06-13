@@ -24,6 +24,7 @@ namespace Scene
     public:
         SubMesh(const std::string& name = {});
         std::unordered_map<std::string, RHI::Buffer> m_vertexBuffers;
+        std::uint32_t m_vertexIndices{};
     private:
         std::string m_meshName{};
     };

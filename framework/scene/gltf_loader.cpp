@@ -10,9 +10,15 @@
 #include "core/command_buffer.h"
 
 #include "submesh.h"
+#include "core/helpers.h"
 
 namespace Scene
 {
+    inline VkFormat getAttributeFormat(const tinygltf::Model* model, uint32_t accessorId)
+    {
+        auto& accessor = model->accessors.at(accessorId);
+    }
+
     GltfLoader::GltfLoader(APP::VkDeviceManager* deviceManager):
         m_deviceManager(deviceManager)
     {
@@ -99,6 +105,12 @@ namespace Scene
         auto pair = std::make_pair("vertexBuffer", std::move(buffer));
         auto pSubmesh = std::make_unique<SubMesh>();
         pSubmesh->m_vertexBuffers.insert(std::move(pair));
+
+        if (gltfPrimitive.indices >= 0)
+        {
+            pSubmesh->m_vertexIndices = to_u32(m_model.accessors.at(gltfPrimitive.indices));
+            
+        }
 
         // todo : commandpool && commandbuffer, copy buffer
         auto& commandBuffer = m_deviceManager->requestCommandBuffer();
