@@ -33,6 +33,8 @@ set(CORE_FILES
     core/render_frame.h
     core/render_frame.cpp
     core/vulkan_vma.cpp
+    core/buffer.h
+    core/buffer.cpp
 )
 
 set(RENDERING_FILES

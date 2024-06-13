@@ -40,6 +40,7 @@ namespace APP
         VkDevice   getDevice() const { return  m_logicalDevice; }
         VkSurfaceKHR getSurface() const { return m_surface; }
         SwapchainInfo getSwapchain() const { return m_swapchainInfo; }
+        VmaAllocator getVmaAllocator() { return m_memoryAllocator; }
 
         uint32_t getGraphicsQueueFamilyIndex() const { return m_GraphicsQueueFamily; }
         VkQueue getGraphicsQueue() const { return m_GraphicsQueue; }

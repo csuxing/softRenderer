@@ -6,6 +6,7 @@
 
 #include "macro.h"
 
+#include "core/buffer.h"
 namespace Scene
 {
     GltfLoader::GltfLoader(APP::VkDeviceManager* deviceManager):
@@ -81,6 +82,18 @@ namespace Scene
             vert.uv = uvs ? glm::make_vec2(&uvs[v * 2]) : glm::vec2(0.0f);
             vertexData.push_back(vert);
         }
+
+        RHI::Buffer stageBuffer{ m_deviceManager, vertexData.size() * sizeof(vertexData),
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY };
+
+        stageBuffer.update(vertexData.data(), vertexData.size() * sizeof(vertexData));
+
+        RHI::Buffer buffer{ m_deviceManager, vertexData.size() * sizeof(vertexData),
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+            VMA_MEMORY_USAGE_GPU_ONLY };
+        // todo : commandpool && commandbuffer, copy buffer
+        
+        // todo : store vkbuffer to submesh, to draw
 
         return std::unique_ptr<SubMesh>();
     }

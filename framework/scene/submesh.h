@@ -15,7 +15,9 @@ namespace Scene
     class SubMesh
     {
     public:
+
     protected:
+
     private:
     };
 }
