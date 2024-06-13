@@ -9,6 +9,8 @@
 #include "core/buffer.h"
 #include "core/command_buffer.h"
 
+#include "submesh.h"
+
 namespace Scene
 {
     GltfLoader::GltfLoader(APP::VkDeviceManager* deviceManager):
@@ -93,6 +95,11 @@ namespace Scene
         RHI::Buffer buffer{ m_deviceManager, vertexData.size() * sizeof(vertexData),
             VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
             VMA_MEMORY_USAGE_GPU_ONLY };
+
+        auto pair = std::make_pair("vertexBuffer", std::move(buffer));
+        auto pSubmesh = std::make_unique<SubMesh>();
+        pSubmesh->m_vertexBuffers.insert(std::move(pair));
+
         // todo : commandpool && commandbuffer, copy buffer
         auto& commandBuffer = m_deviceManager->requestCommandBuffer();
         commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
@@ -102,6 +109,6 @@ namespace Scene
         VkFence fence = m_deviceManager->requestFence();
         APP::VkDeviceManager::submit(m_deviceManager->getGraphicsQueue(), commandBuffer, fence);
         auto res = m_deviceManager->waitForFences({ fence });
-        return std::unique_ptr<SubMesh>();
+        return pSubmesh;
     }
 }

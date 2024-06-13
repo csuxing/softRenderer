@@ -14,6 +14,9 @@ namespace RHI
             VkBufferUsageFlags          bufferUsage,
             VmaMemoryUsage              memoryUsage,
             VmaAllocationCreateFlags =  VMA_ALLOCATION_CREATE_MAPPED_BIT);
+
+        Buffer(Buffer&& other);
+
         void update(const uint8_t* data, size_t size, size_t offset = 0);
         void update(void* data, size_t size, size_t offset = 0);
         void flush() const;

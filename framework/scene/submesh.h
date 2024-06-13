@@ -1,6 +1,13 @@
 #ifndef _SUBMESH_H_H_
 #define _SUBMESH_H_H_
 #include <glm/glm.hpp>
+
+#include <unordered_map>
+#include <string>
+
+#include "core/buffer.h"
+
+#include "component.h"
 namespace Scene
 {
     struct Vertex
@@ -12,13 +19,13 @@ namespace Scene
         glm::vec4 weight0;
     };
 
-    class SubMesh
+    class SubMesh : public Component
     {
     public:
-
-    protected:
-
+        SubMesh(const std::string& name = {});
+        std::unordered_map<std::string, RHI::Buffer> m_vertexBuffers;
     private:
+        std::string m_meshName{};
     };
 }
 #endif

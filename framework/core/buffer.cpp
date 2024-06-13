@@ -30,6 +30,18 @@ RHI::Buffer::Buffer(APP::VkDeviceManager* deviceManager, VkDeviceSize size, VkBu
     }
 }
 
+RHI::Buffer::Buffer(Buffer&& other):
+    m_deviceManager(other.m_deviceManager),
+    m_allocation(other.m_allocation),
+    m_memory(other.m_memory),
+    m_size(other.m_size),
+    m_mappedData(other.m_mappedData),
+    m_persistent(other.m_persistent),
+    m_mapped(other.m_mapped),
+    m_handle(other.m_handle)
+{
+}
+
 void RHI::Buffer::update(const uint8_t* data, size_t size, size_t offset)
 {
     if (m_persistent)
