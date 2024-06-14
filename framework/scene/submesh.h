@@ -2,6 +2,7 @@
 #define _SUBMESH_H_H_
 #include <glm/glm.hpp>
 
+#include <memory>
 #include <unordered_map>
 #include <string>
 
@@ -23,8 +24,11 @@ namespace Scene
     {
     public:
         SubMesh(const std::string& name = {});
-        std::unordered_map<std::string, RHI::Buffer> m_vertexBuffers;
         std::uint32_t m_vertexIndices{};
+        VkIndexType   m_indexType{};
+
+        std::unordered_map<std::string, RHI::Buffer> m_vertexBuffers;
+        std::unique_ptr<RHI::Buffer> m_indexBuffer;
     private:
         std::string m_meshName{};
     };

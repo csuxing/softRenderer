@@ -7,10 +7,11 @@
 #include <volk.h>
 #include <string>
 
+#include "camera.hpp"
+
 namespace RHI
 {
     class Instance;
-
 }
 namespace Jerry
 {
@@ -209,6 +210,7 @@ namespace Jerry
         std::vector<onWindowCloseFunc> m_onWindowCloseFunc;
 
         std::vector<std::string>       m_requiredExtensions;
+        Camera*                        m_camera{};
     };
 }
 

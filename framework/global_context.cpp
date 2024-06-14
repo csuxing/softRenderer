@@ -83,7 +83,7 @@ namespace Jerry
         // load scene
         Scene::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
         std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
-        loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
+        auto mesh = loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
 
         m_renderContext = new RHI::RenderContext(static_cast<APP::VkDeviceManager*>(deviceManger));
         m_renderContext->init();

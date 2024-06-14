@@ -5,7 +5,7 @@ project(framework LANGUAGES C CXX)
 if(USE_RENDER_DOC)
     add_definitions(-DRENDER_DOC)
 endif()
-
+ 
 # set core files
 set(CORE_FILES 
     core/error.h
@@ -36,7 +36,7 @@ set(CORE_FILES
     core/buffer.h
     core/buffer.cpp
 )
-
+ 
 set(RENDERING_FILES
     rendering/render_context.h
     rendering/render_context.cpp
@@ -71,7 +71,7 @@ set(SCENE_FILES
 )
 
 # find other files
-file(GLOB SOURCES *.h *.cpp)
+file(GLOB SOURCES *.h *.cpp *.hpp)
 
 set(PROJECT_FILES
     ${CORE_FILES}
