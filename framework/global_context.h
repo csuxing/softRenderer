@@ -18,7 +18,7 @@ namespace Jerry
 {
     class LogSystem;
     class WindowSystem;
-
+    class InputSystem;
     class GlobalContext
     {
     public:
@@ -28,6 +28,7 @@ namespace Jerry
 
         std::shared_ptr<LogSystem> m_loggerSystem;
         std::shared_ptr<WindowSystem> m_windowSystem;
+        std::shared_ptr<InputSystem> m_inputSystem;
 
         void beginFrame();
         void frame();

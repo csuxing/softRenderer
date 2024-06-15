@@ -46,12 +46,6 @@ namespace Jerry
         {
             m_requiredExtensions.push_back(std::string(glfwExt[i]));
         }
-        m_camera = new Camera;
-        m_camera->type = Camera::CameraType::lookat;
-        m_camera->setPosition(glm::vec3(0.0f, 0.0f, -6.0f));
-        m_camera->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-        m_camera->setPerspective(60.0f, (float)m_width / (float)m_height, 0.1f, 256.0f);
-        // todo(xingyuhang) : register callback, handle mouse move and push button
     }
     void WindowSystem::pollEvents() const
     {

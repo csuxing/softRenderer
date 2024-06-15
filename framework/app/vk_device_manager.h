@@ -47,6 +47,7 @@ namespace APP
         VkSurfaceKHR getSurface() const { return m_surface; }
         SwapchainInfo getSwapchain() const { return m_swapchainInfo; }
         VmaAllocator getVmaAllocator() { return m_memoryAllocator; }
+        VkFormat getDepthFormat() const { return m_depthFromat; }
 
         uint32_t getGraphicsQueueFamilyIndex() const { return m_GraphicsQueueFamily; }
         VkQueue getGraphicsQueue() const { return m_GraphicsQueue; }
@@ -101,6 +102,7 @@ namespace APP
 
         RHI::CommandPool*               m_commandPool{};
         RHI::FencePool*                 m_fencePool{};
+        VkFormat                        m_depthFromat{ VK_FORMAT_D32_SFLOAT_S8_UINT };
     };
 }
 

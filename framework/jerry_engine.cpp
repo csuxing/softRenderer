@@ -1,5 +1,6 @@
 #include "jerry_engine.h"
 #include "global_context.h"
+#include "input_system.h"
 #include "window_system.h"
 #include "macro.h"
 namespace Jerry
@@ -34,7 +35,9 @@ namespace Jerry
     bool JerryEngine::tickOneFrame(float delta_time)
     {
         std::shared_ptr<WindowSystem> windowSystem = GlobalContext::getInstance()->m_windowSystem;
+        std::shared_ptr<InputSystem>  inputSystem = GlobalContext::getInstance()->m_inputSystem;
         windowSystem->pollEvents();
+        inputSystem->tick();
         // tick logical
         tickLogical();
         // tick render

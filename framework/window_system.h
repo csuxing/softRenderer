@@ -26,6 +26,11 @@ namespace Jerry
     class WindowSystem
     {
     public:
+        struct Extent2D
+        {
+            int width{ 0 };
+            int height{ 0 };
+        };
         WindowSystem() = default;
         ~WindowSystem() = default;
 
@@ -35,7 +40,17 @@ namespace Jerry
         void setFocusMode(bool mode);
         VkSurfaceKHR create_surface(RHI::Instance& instance) noexcept;
 
-        GLFWwindow* getWindow() { return m_window; }
+        GLFWwindow* getWindow() const { return m_window; }
+        [[nodiscard]] Extent2D getWindowExtent() const { return {m_width, m_height}; }
+
+        bool isMouseButtonDown(int button) const
+        {
+            if (button < GLFW_MOUSE_BUTTON_1 || button > GLFW_MOUSE_BUTTON_LAST)
+            {
+                return false;
+            }
+            return glfwGetMouseButton(m_window, button) == GLFW_PRESS;
+        }
 
         // declare function
         typedef std::function<void()>                   onResetFunc;
@@ -210,7 +225,6 @@ namespace Jerry
         std::vector<onWindowCloseFunc> m_onWindowCloseFunc;
 
         std::vector<std::string>       m_requiredExtensions;
-        Camera*                        m_camera{};
     };
 }
 

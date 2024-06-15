@@ -9,9 +9,12 @@
 #include "rendering/render_context.h"
 
 #include "fileSystem.h"
+#include "input_system.h"
 #include "app/vk_device_manager.h"
 
 #include "scene/gltf_loader.h"
+#include "rendering/render_pass.h"
+#include "input_system.h"
 
 #ifdef RENDER_DOC
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -59,6 +62,8 @@ namespace Jerry
 
         m_windowSystem = std::make_shared<WindowSystem>();
 
+        m_inputSystem = std::make_shared<InputSystem>();
+
 #ifdef RENDER_DOC
         initRenderDoc();
 #endif
@@ -66,7 +71,7 @@ namespace Jerry
         // it can read from configue && create window
         WindowCreateInfo create_info{};
         m_windowSystem->initalize(create_info);
-
+        m_inputSystem->initialize();
         // device manager create vulkan resource
         auto deviceManger = APP::DeviceManager::create(APP::DeviceManager::kVk);
         APP::DeviceCreationParameters parameters;
@@ -84,6 +89,9 @@ namespace Jerry
         Scene::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
         std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
         auto mesh = loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
+
+        // create pass
+        ForwardRenderPass* forwardRenderpass = new ForwardRenderPass(static_cast<APP::VkDeviceManager*>(deviceManger), m_inputSystem->getCamera());
 
         m_renderContext = new RHI::RenderContext(static_cast<APP::VkDeviceManager*>(deviceManger));
         m_renderContext->init();

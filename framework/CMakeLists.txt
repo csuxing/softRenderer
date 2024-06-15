@@ -5,7 +5,7 @@ project(framework LANGUAGES C CXX)
 if(USE_RENDER_DOC)
     add_definitions(-DRENDER_DOC)
 endif()
- 
+  
 # set core files
 set(CORE_FILES 
     core/error.h
