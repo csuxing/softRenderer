@@ -19,6 +19,7 @@ namespace Jerry
     class LogSystem;
     class WindowSystem;
     class InputSystem;
+    class ForwardRenderPass;
     class GlobalContext
     {
     public:
@@ -53,6 +54,7 @@ namespace Jerry
         std::shared_ptr<RHI::Instance>  m_instance;
         std::shared_ptr<RHI::Device>    m_device;
         RHI::RenderContext*             m_renderContext;
+        ForwardRenderPass*              m_forwardRenderpass{};
         VkSurfaceKHR                    m_surface{ VK_NULL_HANDLE };
         /** @brief Set of device extensions to be enabled for this example and whether they are optional (must be set in the derived constructor) */
         std::unordered_map<const char*, bool> m_deviceExtensions;

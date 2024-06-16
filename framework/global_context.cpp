@@ -88,12 +88,14 @@ namespace Jerry
         // load scene
         Scene::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
         std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
-        auto mesh = loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
+        auto& scene = loader.read_model_from_file(assetPath + "\\cube.gltf", 0);
 
         // create pass
-        ForwardRenderPass* forwardRenderpass = new ForwardRenderPass(static_cast<APP::VkDeviceManager*>(deviceManger), m_inputSystem->getCamera());
-
+        m_forwardRenderpass = new ForwardRenderPass(static_cast<APP::VkDeviceManager*>(deviceManger), m_inputSystem->getCamera());
         m_renderContext = new RHI::RenderContext(static_cast<APP::VkDeviceManager*>(deviceManger));
+        m_renderContext->setPass(m_forwardRenderpass);
+        m_renderContext->setScene(std::move(scene));
+
         m_renderContext->init();
         // init vulkan
         //initVulkan();

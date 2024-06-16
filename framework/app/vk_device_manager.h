@@ -48,6 +48,7 @@ namespace APP
         SwapchainInfo getSwapchain() const { return m_swapchainInfo; }
         VmaAllocator getVmaAllocator() { return m_memoryAllocator; }
         VkFormat getDepthFormat() const { return m_depthFromat; }
+        VkPipelineCache getPipelineCache() const { return m_pipelineCache; }
 
         uint32_t getGraphicsQueueFamilyIndex() const { return m_GraphicsQueueFamily; }
         VkQueue getGraphicsQueue() const { return m_GraphicsQueue; }
@@ -62,7 +63,7 @@ namespace APP
         void createInstance();
         void createVKDevice();
         void createSwapchain();
-
+        void createPipelineCache();
         const GpuInfo& getCurrentUseGpu() const { return m_gpus[m_currentGpuIndex]; }
 
         void queryGpu();
@@ -88,6 +89,7 @@ namespace APP
         VkSurfaceKHR                    m_surface;
         uint32_t                        m_currentGpuIndex{};
         SwapchainInfo                   m_swapchainInfo{};
+        VkPipelineCache                 m_pipelineCache{};
 
         VkQueue                         m_GraphicsQueue{VK_NULL_HANDLE};
         VkQueue                         m_ComputeQueue{VK_NULL_HANDLE};

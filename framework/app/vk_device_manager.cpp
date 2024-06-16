@@ -61,6 +61,7 @@ namespace APP
         createSwapchain();
         m_commandPool = new RHI::CommandPool(this, m_GraphicsQueueFamily);
         m_fencePool = new RHI::FencePool(this);
+        createPipelineCache();
     }
 
     RHI::CommandBuffer& VkDeviceManager::requestCommandBuffer()
@@ -243,6 +244,17 @@ namespace APP
             imageViewCreateInfo.subresourceRange.levelCount = 1;
             imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
             VK_CHECK(vkCreateImageView(m_logicalDevice, &imageViewCreateInfo, nullptr, &m_swapchainInfo.imageViews[i]))
+        }
+    }
+
+    void VkDeviceManager::createPipelineCache()
+    {
+        VkPipelineCacheCreateInfo pipelineCacheCi{};
+        pipelineCacheCi.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+        auto res = vkCreatePipelineCache(m_logicalDevice, &pipelineCacheCi, nullptr, &m_pipelineCache);
+        if (res != VK_SUCCESS)
+        {
+            LOG_ERROR("create pipeline cache failed!");
         }
     }
 

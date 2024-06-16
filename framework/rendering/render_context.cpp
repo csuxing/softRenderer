@@ -7,7 +7,9 @@
 #include "macro.h"
 
 #include "fileSystem.h"
+#include "render_pass.h"
 #include "app/vk_device_manager.h"
+#include "rendering/render_pass.h"
 
 namespace RHI
 {
@@ -44,9 +46,9 @@ namespace RHI
             per_frame.device = m_device;
             per_frame.queue_index = m_deviceManager->getGraphicsQueueFamilyIndex();
         }
-        initRenderpass();
-        initPipeline();
-        initFrameBuffer();
+        //initRenderpass();
+        //initPipeline();
+        //initFrameBuffer();
     }
     void RenderContext::submit(CommandBuffer& commandBuffer)
     {
@@ -94,40 +96,51 @@ namespace RHI
     }
     void RenderContext::frame()
     {
-        VkFramebuffer& framebuffer = m_frameBuffers[m_currentIndex];
+        //VkFramebuffer& framebuffer = m_frameBuffers[m_currentIndex];
 
+        //VkCommandBuffer& cmd = m_perframes[m_currentIndex].primary_command_buffer;
+        //VkCommandBufferBeginInfo begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
+        //begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        //vkBeginCommandBuffer(cmd, &begin_info);
+
+        //VkClearValue clear_value;
+        //clear_value.color = { {0.01f, 0.01f, 0.033f, 1.0f} };
+        //VkRenderPassBeginInfo rp_begin{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+        //rp_begin.renderPass = m_renderpass;
+        //rp_begin.framebuffer = framebuffer;
+        //rp_begin.renderArea.extent.width = m_swapchainInfo.extent.width;
+        //rp_begin.renderArea.extent.height = m_swapchainInfo.extent.height;
+        //rp_begin.clearValueCount = 1;
+        //rp_begin.pClearValues = &clear_value;
+        //// We will add draw commands in the same command buffer.
+        //vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
+        //vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+        //VkViewport vp{};
+        //vp.width = static_cast<float>(rp_begin.renderArea.extent.width);
+        //vp.height = static_cast<float>(rp_begin.renderArea.extent.height);
+        //vp.minDepth = 0.0f;
+        //vp.maxDepth = 1.0f;
+        //// Set viewport dynamically
+        //vkCmdSetViewport(cmd, 0, 1, &vp);
+
+        //VkRect2D scissor{};
+        //scissor.extent.width = rp_begin.renderArea.extent.width;
+        //scissor.extent.height = rp_begin.renderArea.extent.height;
+        //// Set scissor dynamically
+        //vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+        //vkCmdDraw(cmd, 3, 1, 0, 0);
+        //vkCmdEndRenderPass(cmd);
+        //VK_CHECK(vkEndCommandBuffer(cmd));
+
+        // draw pass
         VkCommandBuffer& cmd = m_perframes[m_currentIndex].primary_command_buffer;
         VkCommandBufferBeginInfo begin_info{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
         begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
         vkBeginCommandBuffer(cmd, &begin_info);
-        VkClearValue clear_value;
-        clear_value.color = { {0.01f, 0.01f, 0.033f, 1.0f} };
-        VkRenderPassBeginInfo rp_begin{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
-        rp_begin.renderPass = m_renderpass;
-        rp_begin.framebuffer = framebuffer;
-        rp_begin.renderArea.extent.width = m_swapchainInfo.extent.width;
-        rp_begin.renderArea.extent.height = m_swapchainInfo.extent.height;
-        rp_begin.clearValueCount = 1;
-        rp_begin.pClearValues = &clear_value;
-        // We will add draw commands in the same command buffer.
-        vkCmdBeginRenderPass(cmd, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
-        vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
-        VkViewport vp{};
-        vp.width = static_cast<float>(rp_begin.renderArea.extent.width);
-        vp.height = static_cast<float>(rp_begin.renderArea.extent.height);
-        vp.minDepth = 0.0f;
-        vp.maxDepth = 1.0f;
-        // Set viewport dynamically
-        vkCmdSetViewport(cmd, 0, 1, &vp);
 
-        VkRect2D scissor{};
-        scissor.extent.width = rp_begin.renderArea.extent.width;
-        scissor.extent.height = rp_begin.renderArea.extent.height;
-        // Set scissor dynamically
-        vkCmdSetScissor(cmd, 0, 1, &scissor);
+        m_pass->draw(m_scene.get(), cmd, m_currentIndex);
 
-        vkCmdDraw(cmd, 3, 1, 0, 0);
-        vkCmdEndRenderPass(cmd);
         VK_CHECK(vkEndCommandBuffer(cmd));
     }
     void RenderContext::endFrame()

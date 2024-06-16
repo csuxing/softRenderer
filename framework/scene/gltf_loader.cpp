@@ -159,7 +159,7 @@ namespace Scene
     {
 
     }
-    std::unique_ptr<SubMesh> GltfLoader::read_model_from_file(const std::string& file_name, uint32_t index)
+    std::unique_ptr<Scene> GltfLoader::read_model_from_file(const std::string& file_name, uint32_t index)
     {
         std::string err;
         std::string warn;
@@ -186,7 +186,7 @@ namespace Scene
         return std::move(loadModel(index));
     }
 
-    std::unique_ptr<SubMesh> GltfLoader::loadModel(uint32_t index)
+    std::unique_ptr<Scene> GltfLoader::loadModel(uint32_t index)
     {
         auto& gltfMesh = m_model.meshes.at(index);
         auto& gltfPrimitive = gltfMesh.primitives.at(0);
@@ -204,7 +204,7 @@ namespace Scene
         auto& bufferView = m_model.bufferViews[accessor.bufferView];
         pos = reinterpret_cast<const float*>(&(m_model.buffers[bufferView.buffer].data[accessor.byteOffset + bufferView.byteOffset]));
 
-        if (gltfPrimitive.attributes.find("Normal") != gltfPrimitive.attributes.end())
+        if (gltfPrimitive.attributes.find("NORMAL") != gltfPrimitive.attributes.end())
         {
             accessor = m_model.accessors[gltfPrimitive.attributes.find("NORMAL")->second];
             bufferView = m_model.bufferViews[accessor.bufferView];
@@ -288,6 +288,8 @@ namespace Scene
         VkFence fence = m_deviceManager->requestFence();
         APP::VkDeviceManager::submit(m_deviceManager->getGraphicsQueue(), commandBuffer, fence);
         auto res = m_deviceManager->waitForFences({ fence });
-        return std::move(pSubmesh);
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>();
+        scene->addSubmesh(std::move(pSubmesh));
+        return std::move(scene);
     }
 }

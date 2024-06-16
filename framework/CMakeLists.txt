@@ -35,6 +35,10 @@ set(CORE_FILES
     core/vulkan_vma.cpp
     core/buffer.h
     core/buffer.cpp
+    core/image.h
+    core/image.cpp
+    core/image_view.h
+    core/image_view.cpp
 )
  
 set(RENDERING_FILES

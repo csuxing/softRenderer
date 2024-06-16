@@ -13,20 +13,22 @@
 #include "app/vk_device_manager.h"
 
 #include "submesh.h"
+#include "scene.h"
 
 namespace Scene
 {
+    class Scene;
     class GltfLoader
     {
     public:
         explicit GltfLoader(APP::VkDeviceManager* deviceManager);
         virtual ~GltfLoader() = default;
-        std::unique_ptr<SubMesh> read_model_from_file(const std::string& file_name, uint32_t index);
+        std::unique_ptr<Scene> read_model_from_file(const std::string& file_name, uint32_t index);
     private:
 
-        std::unique_ptr<SubMesh> loadModel(uint32_t index);
+        std::unique_ptr<Scene> loadModel(uint32_t index);
 
-        APP::VkDeviceManager* m_deviceManager{ nullptr };
+        APP::VkDeviceManager*           m_deviceManager{ nullptr };
         tinygltf::Model                 m_model;
     };
 }

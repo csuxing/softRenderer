@@ -5,6 +5,12 @@
 #include <vector>
 
 #include "app/vk_device_manager.h"
+#include "scene/gltf_loader.h"
+
+namespace Jerry
+{
+    class ForwardRenderPass;
+}
 
 namespace APP
 {
@@ -36,7 +42,14 @@ namespace RHI
         };
 
         RenderContext(APP::VkDeviceManager* deviceManager);
-
+        void setPass(Jerry::ForwardRenderPass* pass)
+        {
+            m_pass = pass;
+        }
+        void setScene(std::unique_ptr<Scene::Scene> scene)
+        {
+            m_scene = std::move(scene);
+        }
         void init();
         void submit(CommandBuffer& commandBuffer);
         void beginFrame();
@@ -49,6 +62,8 @@ namespace RHI
         void initFrameBuffer();
     private:
         APP::VkDeviceManager*       m_deviceManager{nullptr};
+        Jerry::ForwardRenderPass*   m_pass;
+        std::unique_ptr<Scene::Scene>               m_scene{};
         VkSurfaceKHR                m_surface{ VK_NULL_HANDLE };
         VkDevice                    m_device{ VK_NULL_HANDLE };
         VkQueue                     m_graphicsQueue{ VK_NULL_HANDLE };

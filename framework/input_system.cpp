@@ -42,7 +42,7 @@ namespace Jerry
         const auto& extent = windowSystem->getWindowExtent();
         m_camera = new Camera;
         m_camera->type = Camera::CameraType::lookat;
-        m_camera->setPosition(glm::vec3(0.0f, 0.0f, -6.0f));
+        m_camera->setPosition(glm::vec3(0.0f, 0.0f, -10.0f));
         m_camera->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
         m_camera->setPerspective(60.0f, (float)extent.width / (float)extent.height, 0.1f, 256.0f);
 
