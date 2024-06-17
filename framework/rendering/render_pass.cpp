@@ -25,7 +25,7 @@ namespace Jerry
         attachmentDescs[0].format = swapchain.format.format;
         attachmentDescs[0].samples = VK_SAMPLE_COUNT_1_BIT;
         attachmentDescs[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        attachmentDescs[0].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachmentDescs[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
         attachmentDescs[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         attachmentDescs[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         attachmentDescs[0].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -35,7 +35,7 @@ namespace Jerry
         attachmentDescs[1].format = m_deviceManager->getDepthFormat();
         attachmentDescs[1].samples = VK_SAMPLE_COUNT_1_BIT;
         attachmentDescs[1].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        attachmentDescs[1].storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        attachmentDescs[1].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
         attachmentDescs[1].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         attachmentDescs[1].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
         attachmentDescs[1].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -69,8 +69,8 @@ namespace Jerry
         subpassDependences[0].dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT;
         subpassDependences[0].dependencyFlags = 0;
 
-        subpassDependences[1].srcSubpass = 0;
-        subpassDependences[1].dstSubpass = VK_SUBPASS_EXTERNAL;
+        subpassDependences[1].srcSubpass = VK_SUBPASS_EXTERNAL;
+        subpassDependences[1].dstSubpass = 0;
         subpassDependences[1].srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         subpassDependences[1].dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         subpassDependences[1].srcAccessMask = 0;
@@ -132,8 +132,9 @@ namespace Jerry
 
     void ForwardRenderPass::draw(Scene::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index)
     {
+        updateCamera();
         VkClearValue clear_value[2];
-        clear_value[0].color = {{1.0f, 1.0f, 1.0f, 1.0f}};
+        clear_value[0].color = {{0.5f, 0.5f, 0.5f, 1.0f}};
         clear_value[1].depthStencil = {1.0f, 0xf};
         VkRenderPassBeginInfo rp_begin{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         rp_begin.renderPass = m_forwardRenderpass;
@@ -163,6 +164,13 @@ namespace Jerry
         scene->draw(commandBuffer);
 
         vkCmdEndRenderPass(commandBuffer);
+    }
+
+    void ForwardRenderPass::updateCamera()
+    {
+        m_uboSceneParams.projection = m_camera->matrices.perspective;
+        m_uboSceneParams.view = m_camera->matrices.view;
+        m_uboSceneParamsGpu->update(&m_uboSceneParams, sizeof(m_uboSceneParams));
     }
 
     void ForwardRenderPass::setUpDepthAttachment()
@@ -328,7 +336,7 @@ namespace Jerry
             nullptr,
             0,
             VK_FALSE,
-            VK_TRUE,
+            VK_FALSE,
             VK_POLYGON_MODE_FILL,
             VK_CULL_MODE_NONE,
             VK_FRONT_FACE_COUNTER_CLOCKWISE,
@@ -340,54 +348,36 @@ namespace Jerry
         };
         graphicsPipelineCi.pRasterizationState = &pipeline_rasterization_state_create_info;
         // multi sampler state
-        VkPipelineMultisampleStateCreateInfo pipeline_multisample_state_create_info
-        {
-            VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO,
-            nullptr,
-            0,
-            VK_SAMPLE_COUNT_1_BIT,
-            VK_FALSE,
-            0.0,
-            nullptr,
-            VK_FALSE,
-            VK_FALSE
-        };
-        graphicsPipelineCi.pMultisampleState = &pipeline_multisample_state_create_info;
+        VkPipelineMultisampleStateCreateInfo multisampleState = {};
+        multisampleState.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+        multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+        multisampleState.pSampleMask = nullptr;
+
+        graphicsPipelineCi.pMultisampleState = &multisampleState;
         // depth stencil state
-        VkPipelineDepthStencilStateCreateInfo pipeline_depth_stencil_state_create_info
-        {
-            VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO,
-            nullptr,
-            0,
-            VK_TRUE,
-            VK_TRUE,
-            VK_COMPARE_OP_LESS_OR_EQUAL,
-            VK_TRUE,
-            VK_FALSE,
-        };
-        graphicsPipelineCi.pDepthStencilState = &pipeline_depth_stencil_state_create_info;
+        VkPipelineDepthStencilStateCreateInfo depthStencilState = {};
+        depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+        depthStencilState.depthTestEnable = VK_TRUE;
+        depthStencilState.depthWriteEnable = VK_TRUE;
+        depthStencilState.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+        depthStencilState.depthBoundsTestEnable = VK_FALSE;
+        depthStencilState.back.failOp = VK_STENCIL_OP_KEEP;
+        depthStencilState.back.passOp = VK_STENCIL_OP_KEEP;
+        depthStencilState.back.compareOp = VK_COMPARE_OP_ALWAYS;
+        depthStencilState.stencilTestEnable = VK_FALSE;
+        depthStencilState.front = depthStencilState.back;
+
+        graphicsPipelineCi.pDepthStencilState = &depthStencilState;
         // color blend
-        VkPipelineColorBlendAttachmentState color_blend_attachment_state
-        {
-            VK_TRUE,
-            VK_BLEND_FACTOR_ONE,
-            VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
-            VK_BLEND_OP_ADD,
-            VK_BLEND_FACTOR_ONE,
-            VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR,
-            VK_BLEND_OP_ADD,
-            VK_COLOR_COMPONENT_A_BIT
-        };
-        VkPipelineColorBlendStateCreateInfo pipeline_color_blend_state_create_info{
-            VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
-            nullptr,
-            0,
-            VK_TRUE,
-            VK_LOGIC_OP_AND,
-            1,
-            &color_blend_attachment_state
-        };
-        graphicsPipelineCi.pColorBlendState = &pipeline_color_blend_state_create_info;
+        VkPipelineColorBlendAttachmentState blendAttachmentState[1] = {};
+        blendAttachmentState[0].colorWriteMask = 0xf;
+        blendAttachmentState[0].blendEnable = VK_FALSE;
+        VkPipelineColorBlendStateCreateInfo colorBlendState = {};
+        colorBlendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+        colorBlendState.attachmentCount = 1;
+        colorBlendState.pAttachments = blendAttachmentState;
+
+        graphicsPipelineCi.pColorBlendState = &colorBlendState;
         // dynamic state
         std::vector<VkDynamicState> states
         {

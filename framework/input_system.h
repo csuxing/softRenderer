@@ -11,6 +11,8 @@ namespace Jerry
     public:
         void onKey(int key, int scanCode, int action, int mods);
         void onCursorPos(double currentCursorX, double currentCursorY);
+        void onScroll(double scrollX, double scrollY);
+
         void initialize();
         void tick();
         void clear();

@@ -37,6 +37,7 @@ namespace Jerry
     public:
         explicit ForwardRenderPass(APP::VkDeviceManager* manager, Camera* camera);
         void draw(Scene::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index);
+        void updateCamera();
     protected:
         void setUpDepthAttachment();
         void setUpDescriptorPool();
