@@ -8,7 +8,7 @@ namespace Jerry
 {
     const std::unordered_map<Type, std::string> relative_paths = {
         {Type::Assets, "\\assets\\"},
-        {Type::Shaders, "\\shaders\\"},
+        {Type::Shaders, "\\shaders\\spv\\"},
         {Type::Storage, "\\output\\"},
         {Type::Screenshots, "\\output\\images\\"},
         {Type::Logs, "\\output\\logs\\"},

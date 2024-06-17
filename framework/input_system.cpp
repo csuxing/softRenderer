@@ -25,7 +25,9 @@ namespace Jerry
             }
             else if (windowSystem->isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
             {
-                
+                auto dx = currentCursorX - m_Mousex;
+                auto dy = currentCursorY - m_Mousey;
+                m_camera->rotate(glm::vec3(0.1 * dy, 0.0, 0.1 * dx));
             }
             else
             {

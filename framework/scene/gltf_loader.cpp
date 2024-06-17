@@ -227,12 +227,12 @@ namespace Scene
             vertexData.push_back(vert);
         }
 
-        RHI::Buffer stageBuffer{ m_deviceManager, vertexData.size() * sizeof(vertexData),
+        RHI::Buffer stageBuffer{ m_deviceManager, vertexData.size() * sizeof(Vertex),
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY };
 
-        stageBuffer.update(vertexData.data(), vertexData.size() * sizeof(vertexData));
+        stageBuffer.update(vertexData.data(), vertexData.size() * sizeof(Vertex));
 
-        RHI::Buffer buffer{ m_deviceManager, vertexData.size() * sizeof(vertexData),
+        RHI::Buffer buffer{ m_deviceManager, vertexData.size() * sizeof(Vertex),
             VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
             VMA_MEMORY_USAGE_GPU_ONLY };
 
@@ -283,7 +283,7 @@ namespace Scene
         // todo : commandpool && commandbuffer, copy buffer
 
         // todo : store vkbuffer to submesh, to draw
-        commandBuffer.copyBuffer(stageBuffer, buffer, vertexData.size() * sizeof(vertexData));
+        commandBuffer.copyBuffer(stageBuffer, buffer, vertexData.size() * sizeof(Vertex));
         commandBuffer.end();
         VkFence fence = m_deviceManager->requestFence();
         APP::VkDeviceManager::submit(m_deviceManager->getGraphicsQueue(), commandBuffer, fence);
