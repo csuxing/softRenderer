@@ -4,7 +4,6 @@
 
 #include "app/vk_device_manager.h"
 
-#include "device.h"
 #include "error.h"
 
 namespace RHI

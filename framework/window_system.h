@@ -38,7 +38,6 @@ namespace Jerry
         void pollEvents() const;
         bool shouldClose() const;
         void setFocusMode(bool mode);
-        VkSurfaceKHR create_surface(RHI::Instance& instance) noexcept;
 
         GLFWwindow* getWindow() const { return m_window; }
         [[nodiscard]] Extent2D getWindowExtent() const { return {m_width, m_height}; }

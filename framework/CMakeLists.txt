@@ -14,16 +14,8 @@ set(CORE_FILES
     core/debug.cpp
     core/helpers.h
     core/helpers.cpp
-    core/instance.h
-    core/instance.cpp
-    core/device.h
-    core/device.cpp
-    core/physical_device.h
-    core/physical_device.cpp
     core/vulkan_resource.h
     core/vulkan_resource.cpp
-    core/queue.h
-    core/queue.cpp
     core/command_pool.h
     core/command_pool.cpp
     core/fence_pool.h
@@ -48,8 +40,6 @@ set(RENDERING_FILES
     rendering/render_pass.cpp
     rendering/framebuffer.h
     rendering/framebuffer.cpp
-    rendering/swapchain.h
-    rendering/swapchain.cpp
     rendering/render_frame.h
     rendering/render_frame.cpp
 )
