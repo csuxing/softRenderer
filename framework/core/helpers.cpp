@@ -1,7 +1,10 @@
 #include "helpers.h"
+
+#include <fstream>
+
 #include "macro.h"
 #include "error.h"
-#include <fstream>
+
 VkShaderModule loadShader(const char* fileName, VkDevice device)
 {
     std::ifstream is(fileName, std::ios::binary | std::ios::in | std::ios::ate);

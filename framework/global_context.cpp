@@ -1,19 +1,20 @@
-#include <volk.h>
-#include "glfw/glfw3.h"
 #include "global_context.h"
-#include "log_system.h"
-#include "window_system.h"
-#include "macro.h"
 
-#include "rendering/render_context.h"
+#include <volk.h>
+#include <glfw/glfw3.h>
 
-#include "fileSystem.h"
-#include "input_system.h"
 #include "app/vk_device_manager.h"
 
-#include "scene/gltf_loader.h"
+#include "rendering/render_context.h"
 #include "rendering/render_pass.h"
+
+#include "scene/gltf_loader.h"
+
+#include "log_system.h"
+#include "window_system.h"
+#include "fileSystem.h"
 #include "input_system.h"
+#include "macro.h"
 
 #ifdef RENDER_DOC
 #define GLFW_EXPOSE_NATIVE_WIN32
@@ -69,13 +70,12 @@ namespace Jerry
         m_renderContext->setScene(std::move(scene));
 
         m_renderContext->init();
-        // init vulkan
-        //initVulkan();
     }
     void GlobalContext::shutdownSystem()
     {
         m_windowSystem.reset();
         m_loggerSystem.reset();
+        m_inputSystem.reset();
     }
     GlobalContext* GlobalContext::getInstance()
     {

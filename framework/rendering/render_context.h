@@ -19,8 +19,6 @@ namespace APP
 namespace RHI
 {
     class CommandBuffer;
-    class Device;
-    class Swapchain;
     class RenderContext
     {
     public:
@@ -42,6 +40,7 @@ namespace RHI
         };
 
         RenderContext(APP::VkDeviceManager* deviceManager);
+
         void setPass(Jerry::ForwardRenderPass* pass)
         {
             m_pass = pass;
@@ -50,6 +49,7 @@ namespace RHI
         {
             m_scene = std::move(scene);
         }
+
         void init();
         void submit(CommandBuffer& commandBuffer);
         void beginFrame();

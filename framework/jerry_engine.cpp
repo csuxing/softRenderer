@@ -1,4 +1,5 @@
 #include "jerry_engine.h"
+
 #include "global_context.h"
 #include "input_system.h"
 #include "window_system.h"

@@ -1,7 +1,8 @@
-#ifndef _global_context_H_H_
-#define _global_context_H_H_
+#ifndef _GLOBAL_CONTEXT_H_H_
+#define _GLOBAL_CONTEXT_H_H_
 #include <memory>
 #include <unordered_map>
+
 #include <volk.h>
 
 #ifdef RENDER_DOC
@@ -10,8 +11,6 @@
 
 namespace RHI
 {
-    class Instance;
-    class Device;
     class RenderContext;
 }
 namespace Jerry
@@ -34,7 +33,7 @@ namespace Jerry
         void beginFrame();
         void frame();
         void endFrame();
-        
+
     protected:
         // load vulkan library && function pointer
         void initVulkan();
@@ -51,8 +50,6 @@ namespace Jerry
             m_instanceExtensions.insert({ extension, true });
         }
     private:
-        std::shared_ptr<RHI::Instance>  m_instance;
-        std::shared_ptr<RHI::Device>    m_device;
         RHI::RenderContext*             m_renderContext;
         ForwardRenderPass*              m_forwardRenderpass{};
         VkSurfaceKHR                    m_surface{ VK_NULL_HANDLE };
