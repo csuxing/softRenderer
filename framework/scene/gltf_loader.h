@@ -24,9 +24,11 @@ namespace Scene
         explicit GltfLoader(APP::VkDeviceManager* deviceManager);
         virtual ~GltfLoader() = default;
         std::unique_ptr<Scene> read_model_from_file(const std::string& file_name, uint32_t index);
+        std::unique_ptr<Scene> read_model_from_file(const std::string& file_name);
+        std::unique_ptr<Scene> read_scene_from_file(const std::string& fileName, int sceneIndex = -1);
     private:
 
-        std::unique_ptr<Scene> loadModel(uint32_t index);
+        std::unique_ptr<SubMesh> loadModel(uint32_t index);
 
         APP::VkDeviceManager*           m_deviceManager{ nullptr };
         tinygltf::Model                 m_model;

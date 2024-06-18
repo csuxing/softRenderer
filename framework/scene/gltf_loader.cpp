@@ -182,11 +182,49 @@ namespace Scene
         {
             LOG_INFO("", warn.c_str());
         }
-
-        return std::move(loadModel(index));
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>();
+        scene->addSubmesh(std::move(loadModel(index)));
+        return std::move(scene);
     }
 
-    std::unique_ptr<Scene> GltfLoader::loadModel(uint32_t index)
+    std::unique_ptr<Scene> GltfLoader::read_model_from_file(const std::string& file_name)
+    {
+        std::string err;
+        std::string warn;
+
+        tinygltf::TinyGLTF gltf_loader;
+
+        bool importResult = gltf_loader.LoadASCIIFromFile(&m_model, &err, &warn, file_name.c_str());
+
+        if (!importResult)
+        {
+            LOG_ERROR("Failed to load gltf file {}", file_name.c_str());
+        }
+
+        if (!err.empty())
+        {
+            LOG_ERROR("error loading gltfModel : {}", err.c_str());
+        }
+
+        if (!warn.empty())
+        {
+            LOG_INFO("", warn.c_str());
+        }
+        std::unique_ptr<Scene> scene = std::make_unique<Scene>();
+        size_t meshSize = m_model.meshes.size();
+        for (size_t i = 0; i < meshSize; ++i)
+        {
+            scene->addSubmesh(std::move(loadModel(i)));
+        }
+        return std::move(scene);
+    }
+
+    std::unique_ptr<Scene> GltfLoader::read_scene_from_file(const std::string& fileName, int sceneIndex)
+    {
+        return std::unique_ptr<Scene>();
+    }
+
+    std::unique_ptr<SubMesh> GltfLoader::loadModel(uint32_t index)
     {
         auto& gltfMesh = m_model.meshes.at(index);
         auto& gltfPrimitive = gltfMesh.primitives.at(0);
@@ -288,8 +326,7 @@ namespace Scene
         VkFence fence = m_deviceManager->requestFence();
         APP::VkDeviceManager::submit(m_deviceManager->getGraphicsQueue(), commandBuffer, fence);
         auto res = m_deviceManager->waitForFences({ fence });
-        std::unique_ptr<Scene> scene = std::make_unique<Scene>();
-        scene->addSubmesh(std::move(pSubmesh));
-        return std::move(scene);
+
+        return std::move(pSubmesh);
     }
 }
