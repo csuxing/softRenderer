@@ -59,9 +59,10 @@ namespace Jerry
         deviceManger->createDevice(parameters);
 
         // load scene
-        Scene::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
+        SG::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
         std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
-        auto& scene = loader.read_model_from_file(assetPath + "\\teapot.gltf");
+        auto& scene = loader.read_scene_from_file(assetPath + "\\teapot.gltf");
+        // auto& scene = loader.read_model_from_file(assetPath + "\\teapot.gltf");
 
         // create pass
         m_forwardRenderpass = new ForwardRenderPass(static_cast<APP::VkDeviceManager*>(deviceManger), m_inputSystem->getCamera());

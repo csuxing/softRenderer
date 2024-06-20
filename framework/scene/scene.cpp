@@ -1,6 +1,6 @@
 #include "scene.h"
 #include "submesh.h"
-namespace Scene
+namespace SG
 {
     void Scene::addSubmesh(std::unique_ptr<SubMesh> submesh)
     {

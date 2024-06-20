@@ -14,8 +14,9 @@
 
 #include "submesh.h"
 #include "scene.h"
+#include "basic_define.h"
 
-namespace Scene
+namespace SG
 {
     class Scene;
     class GltfLoader

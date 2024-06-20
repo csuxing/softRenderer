@@ -49,6 +49,7 @@ namespace Jerry
         std::shared_ptr<WindowSystem> windowSystem = GlobalContext::getInstance()->m_windowSystem;
         const auto& extent = windowSystem->getWindowExtent();
         m_camera = new Camera;
+        m_camera->flipY = true;
         m_camera->type = Camera::CameraType::lookat;
         m_camera->setPosition(glm::vec3(0.0f, 0.0f, -50.0f));
         m_camera->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));

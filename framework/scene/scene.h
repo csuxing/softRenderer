@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "core/command_buffer.h"
-
-namespace Scene
+#include "basic_define.h"
+namespace SG
 {
     class SubMesh;
     class Scene

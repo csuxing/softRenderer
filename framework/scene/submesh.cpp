@@ -1,9 +1,14 @@
 #include "submesh.h"
-namespace Scene
+namespace SG
 {
     SubMesh::SubMesh(const std::string& name):
         m_meshName(name)
     {
+    }
+
+    std::type_index SubMesh::getType()
+    {
+        return typeid(SubMesh);
     }
 
     void SubMesh::draw(VkCommandBuffer& cmd)

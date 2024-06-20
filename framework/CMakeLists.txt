@@ -62,6 +62,8 @@ set(SCENE_FILES
     scene/gltf_loader.cpp
     scene/submesh.h
     scene/submesh.cpp
+    scene/import_image.h
+    scene/import_image.cpp
 )
 
 # find other files

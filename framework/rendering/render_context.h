@@ -45,7 +45,7 @@ namespace RHI
         {
             m_pass = pass;
         }
-        void setScene(std::unique_ptr<Scene::Scene> scene)
+        void setScene(std::unique_ptr<SG::Scene> scene)
         {
             m_scene = std::move(scene);
         }
@@ -63,7 +63,7 @@ namespace RHI
     private:
         APP::VkDeviceManager*       m_deviceManager{nullptr};
         Jerry::ForwardRenderPass*   m_pass;
-        std::unique_ptr<Scene::Scene>               m_scene{};
+        std::unique_ptr<SG::Scene>               m_scene{};
         VkSurfaceKHR                m_surface{ VK_NULL_HANDLE };
         VkDevice                    m_device{ VK_NULL_HANDLE };
         VkQueue                     m_graphicsQueue{ VK_NULL_HANDLE };

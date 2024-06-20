@@ -130,7 +130,7 @@ namespace Jerry
         setUpPipeline();
     }
 
-    void ForwardRenderPass::draw(Scene::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index)
+    void ForwardRenderPass::draw(SG::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index)
     {
         updateCamera();
         VkClearValue clear_value[2];
@@ -283,8 +283,8 @@ namespace Jerry
         graphicsPipelineCi.stageCount = to_u32(shader_stages.size());
         graphicsPipelineCi.pStages = shader_stages.data();
         // vertex input state
-        const auto& vertexBindingDesc = Scene::Vertex::getVertexInputBindDesc();
-        const auto& vertexAttributeDesc = Scene::Vertex::getVertexInputAttributeDesc();
+        const auto& vertexBindingDesc = SG::Vertex::getVertexInputBindDesc();
+        const auto& vertexAttributeDesc = SG::Vertex::getVertexInputAttributeDesc();
         VkPipelineVertexInputStateCreateInfo vertexInputStateCi
         {
             VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,

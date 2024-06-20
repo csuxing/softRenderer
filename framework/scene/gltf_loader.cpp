@@ -12,7 +12,7 @@
 #include "submesh.h"
 #include "core/helpers.h"
 
-namespace Scene
+namespace SG
 {
     inline size_t getAttributeSize(const tinygltf::Model* model, uint32_t accessorId)
     {
@@ -221,6 +221,7 @@ namespace Scene
 
     std::unique_ptr<Scene> GltfLoader::read_scene_from_file(const std::string& fileName, int sceneIndex)
     {
+        m_model.images;
         return std::unique_ptr<Scene>();
     }
 

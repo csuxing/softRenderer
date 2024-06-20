@@ -12,7 +12,7 @@ namespace APP
     class VkDeviceManager;
 }
 
-namespace Scene
+namespace SG
 {
     class Scene;
 }
@@ -36,7 +36,7 @@ namespace Jerry
     {
     public:
         explicit ForwardRenderPass(APP::VkDeviceManager* manager, Camera* camera);
-        void draw(Scene::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index);
+        void draw(SG::Scene* scene, VkCommandBuffer& commandBuffer, uint32_t index);
         void updateCamera();
     protected:
         void setUpDepthAttachment();

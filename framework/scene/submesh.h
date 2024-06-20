@@ -8,8 +8,8 @@
 
 #include "core/buffer.h"
 #include "component.h"
-
-namespace Scene
+#include "basic_define.h"
+namespace SG
 {
     struct Vertex
     {
@@ -45,6 +45,7 @@ namespace Scene
     {
     public:
         SubMesh(const std::string& name = {});
+        virtual std::type_index getType() override;
         void draw(VkCommandBuffer& cmd);
         std::uint32_t m_vertexIndices{};
         VkIndexType   m_indexType{};
