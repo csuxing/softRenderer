@@ -269,7 +269,7 @@ namespace SG
             auto imageUrl = m_modelPath + "\\" + gltfImage.uri;
             image = ImportImage::load(gltfImage.name, imageUrl, ImportImage::Unknown);
         }
-        return std::unique_ptr<ImportImage>();
+        return image;
     }
 
     std::unique_ptr<SubMesh> GltfLoader::loadModel(uint32_t index)
@@ -384,7 +384,7 @@ namespace SG
         scene.setName("gltfModelScene");
         for (int i = 0; i < m_model.images.size(); ++i)
         {
-            parseImage(m_model.images[i]);
+            auto& image = parseImage(m_model.images[i]);
         }
         return Scene();
     }
