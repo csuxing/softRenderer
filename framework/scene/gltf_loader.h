@@ -15,7 +15,7 @@
 #include "submesh.h"
 #include "scene.h"
 #include "basic_define.h"
-
+#include "import_image.h"
 namespace SG
 {
     class Scene;
@@ -27,12 +27,16 @@ namespace SG
         std::unique_ptr<Scene> read_model_from_file(const std::string& file_name, uint32_t index);
         std::unique_ptr<Scene> read_model_from_file(const std::string& file_name);
         std::unique_ptr<Scene> read_scene_from_file(const std::string& fileName, int sceneIndex = -1);
+    protected:
+        std::unique_ptr<ImportImage> parseImage(tinygltf::Image& gltfImage) const;
+
     private:
 
         std::unique_ptr<SubMesh> loadModel(uint32_t index);
-
+        Scene loadScene();
         APP::VkDeviceManager*           m_deviceManager{ nullptr };
         tinygltf::Model                 m_model;
+        std::string                     m_modelPath;
     };
 }
 

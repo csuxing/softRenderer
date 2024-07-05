@@ -61,7 +61,7 @@ namespace Jerry
         // load scene
         SG::GltfLoader loader(static_cast<APP::VkDeviceManager*>(deviceManger));
         std::string assetPath = Jerry::get(Jerry::Type::Assets, "gltfModel");
-        auto& scene = loader.read_scene_from_file(assetPath + "\\teapot.gltf");
+        auto& scene = loader.read_scene_from_file(assetPath + "\\sponza\\Sponza01.gltf");
         // auto& scene = loader.read_model_from_file(assetPath + "\\teapot.gltf");
 
         // create pass

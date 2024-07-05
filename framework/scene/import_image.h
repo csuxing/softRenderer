@@ -2,6 +2,7 @@
 #define _IMPORT_IMAGE_H_H_
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <volk.h>
 
@@ -20,8 +21,17 @@ namespace SG
     class ImportImage : public Component
     {
     public:
+        enum ContentType
+        {
+            Unknown,
+            Color,
+            Other
+        };
+        static std::unique_ptr<ImportImage> load(const std::string& name, const std::string& url, ContentType content_type);
         ImportImage(const std::string& name, std::vector<uint8_t>&& data, std::vector<Mipmap>&& mipmaps = { {} });
         virtual std::type_index getType() override;
+    private:
+        std::string m_name;
     };
 }
 

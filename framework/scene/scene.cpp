@@ -15,4 +15,12 @@ namespace SG
             m_meshs[i]->draw(cmd);
         }
     }
+    void Scene::setName(const std::string& name)
+    {
+        m_name = name;
+    }
+    void Scene::setComponents(const std::type_index& typeInfo, std::vector<std::unique_ptr<Component>>&& components)
+    {
+        m_components[typeInfo] = std::move(components);
+    }
 }

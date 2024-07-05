@@ -214,15 +214,62 @@ namespace SG
         size_t meshSize = m_model.meshes.size();
         for (size_t i = 0; i < meshSize; ++i)
         {
-            scene->addSubmesh(std::move(loadModel(i)));
+            scene->addSubmesh(std::move(loadModel(static_cast<uint32_t>(i))));
         }
         return std::move(scene);
     }
 
     std::unique_ptr<Scene> GltfLoader::read_scene_from_file(const std::string& fileName, int sceneIndex)
     {
-        m_model.images;
-        return std::unique_ptr<Scene>();
+        std::string err;
+        std::string warn;
+
+        tinygltf::TinyGLTF gltf_loader;
+        bool importResult = gltf_loader.LoadASCIIFromFile(&m_model, &err, &warn, fileName.c_str());
+        if (!importResult)
+        {
+            LOG_ERROR("Failed to load gltf file {}.", fileName.c_str());
+
+            return nullptr;
+        }
+
+        if (!err.empty())
+        {
+            LOG_ERROR("Error loading gltf model: {}.", err.c_str());
+
+            return nullptr;
+        }
+
+        if (!warn.empty())
+        {
+            LOG_ERROR("{}", warn.c_str());
+        }
+        size_t pos = fileName.find_last_of('\\');
+
+        m_modelPath = fileName.substr(0, pos);
+
+        if (pos == std::string::npos)
+        {
+            m_modelPath.clear();
+        }
+        return std::make_unique<Scene>(loadScene());
+    }
+
+    std::unique_ptr<ImportImage> GltfLoader::parseImage(tinygltf::Image& gltfImage) const
+    {
+        std::unique_ptr<ImportImage> image{ nullptr };
+        if (!gltfImage.image.empty())
+        {
+            auto mipmap = Mipmap{ 0,0,{static_cast<uint32_t>(gltfImage.width),static_cast<uint32_t>(gltfImage.height),1u} };
+            std::vector<Mipmap> mipmaps{ mipmap };
+            image = std::make_unique<ImportImage>(gltfImage.name, std::move(gltfImage.image), std::move(mipmaps));
+        }
+        else
+        {
+            auto imageUrl = m_modelPath + "\\" + gltfImage.uri;
+            image = ImportImage::load(gltfImage.name, imageUrl, ImportImage::Unknown);
+        }
+        return std::unique_ptr<ImportImage>();
     }
 
     std::unique_ptr<SubMesh> GltfLoader::loadModel(uint32_t index)
@@ -329,5 +376,16 @@ namespace SG
         auto res = m_deviceManager->waitForFences({ fence });
 
         return std::move(pSubmesh);
+    }
+
+    Scene GltfLoader::loadScene()
+    {
+        auto scene = Scene();
+        scene.setName("gltfModelScene");
+        for (int i = 0; i < m_model.images.size(); ++i)
+        {
+            parseImage(m_model.images[i]);
+        }
+        return Scene();
     }
 }

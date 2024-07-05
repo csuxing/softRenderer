@@ -64,6 +64,8 @@ set(SCENE_FILES
     scene/submesh.cpp
     scene/import_image.h
     scene/import_image.cpp
+    scene/ktx.h
+    scene/ktx.cpp
 )
 
 # find other files

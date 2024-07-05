@@ -20,4 +20,8 @@ namespace Jerry
         Temp
     };
     const std::string get(const Type type, const std::string& file = "");
+
+    std::vector<uint8_t> read_binary_file(const std::string& filename, const uint32_t count);
+
+    std::string get_extension(const std::string& uri);
 }
