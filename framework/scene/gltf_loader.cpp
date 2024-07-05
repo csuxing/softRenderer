@@ -382,9 +382,11 @@ namespace SG
     {
         auto scene = Scene();
         scene.setName("gltfModelScene");
+        std::vector<std::unique_ptr<ImportImage>> image_components;
         for (int i = 0; i < m_model.images.size(); ++i)
         {
             auto& image = parseImage(m_model.images[i]);
+            image_components.push_back(std::move(image));
         }
         return Scene();
     }
