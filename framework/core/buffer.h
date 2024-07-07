@@ -19,6 +19,7 @@ namespace RHI
 
         void update(const uint8_t* data, size_t size, size_t offset = 0);
         void update(void* data, size_t size, size_t offset = 0);
+        void update(const std::vector<uint8_t>& data, size_t offset = 0);
         void flush() const;
         uint8_t* map();
         void unmap();

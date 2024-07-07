@@ -68,6 +68,11 @@ set(SCENE_FILES
     scene/ktx.cpp
 )
 
+set(COMMON_FIILES
+    common/vk_common.h
+    common/vk_common.cpp
+)
+
 # find other files
 file(GLOB SOURCES *.h *.cpp *.hpp)
 
@@ -76,6 +81,7 @@ set(PROJECT_FILES
     ${RENDERING_FILES}
     ${APP_FILES}
     ${SCENE_FILES}
+    ${COMMON_FIILES}
     ${SOURCES}
 )
 
@@ -84,12 +90,14 @@ set(RENDERING_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/framework/rendering)
 set(RENDER_PATH ${CMAKE_SOURCE_DIR}/framework)
 set(PLATFORM_INCLUDE_PATH ${CMAKE_SOURCE_DIR}/platform)
 set(RENDER_DOC ${CMAKE_SOURCE_DIR}/thirdParty/renderdoc)
+set(COMMON_PATH ${CMAKE_SOURCE_DIR}/framework/common)
 
 source_group("\\" FILES ${SOURCES})
 source_group("core\\" FILES ${CORE_FILES})
 source_group("rendering\\" FILES ${RENDERING_FILES})
 source_group("app\\" FILES ${APP_FILES})
 source_group("scene\\" FILES ${SCENE_FILES})
+source_group("common\\" FILES ${COMMON_FIILES})
 
 # generate lib, not exe
 add_library(${PROJECT_NAME} STATIC ${PROJECT_FILES})

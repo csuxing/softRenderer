@@ -116,6 +116,18 @@ namespace SG
     {
         m_format = maybe_coerce_to_srgb(m_format);
     }
+
+    const std::vector<uint8_t>& ImportImage::get_data() const
+    {
+        return m_data;
+    }
+
+    void ImportImage::clear_data()
+    {
+        m_data.clear();
+        m_data.shrink_to_fit();
+    }
+
     void ImportImage::setData(const uint8_t* rawData, size_t size)
     {
         ASSERT(m_data.empty() && "image data already set!");

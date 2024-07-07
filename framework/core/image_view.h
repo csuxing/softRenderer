@@ -17,6 +17,18 @@ namespace RHI
             uint32_t nMipLevels = 0, uint32_t nArrayLayers = 0);
 
         VkImageView getHandle() const { return m_handle; }
+        VkImageSubresourceRange get_subresource_range() const
+        {
+            return m_subresourceRange;
+        }
+        VkFormat get_format() const
+        {
+            return m_format;
+        }
+        const Image& get_image() const
+        {
+            return *m_image;
+        }
     private:
         APP::VkDeviceManager* m_deviceManager{};
         VkImageView             m_handle{};

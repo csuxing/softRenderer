@@ -62,6 +62,11 @@ void RHI::Buffer::update(void* data, size_t size, size_t offset)
     update(reinterpret_cast<const uint8_t*>(data), size, offset);
 }
 
+void RHI::Buffer::update(const std::vector<uint8_t>& data, size_t offset)
+{
+    update(data.data(), data.size(), offset);
+}
+
 void RHI::Buffer::flush() const
 {
     vmaFlushAllocation(m_deviceManager->getVmaAllocator(), m_allocation, 0, m_size);

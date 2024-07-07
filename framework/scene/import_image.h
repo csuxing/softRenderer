@@ -31,6 +31,8 @@ namespace SG
         ImportImage(const std::string& name, std::vector<uint8_t>&& data, std::vector<Mipmap>&& mipmaps = { {} });
         virtual std::type_index getType() override;
         void coerce_format_to_srgb();
+        const std::vector<uint8_t>& get_data() const;
+        void clear_data();
     protected:
         void setData(const uint8_t* rawData, size_t size);
         std::vector<uint8_t>& getMutData();
@@ -41,6 +43,7 @@ namespace SG
         void setFormat(VkFormat format);
         void set_offsets(const std::vector<std::vector<VkDeviceSize>>& offsets);
         std::vector<Mipmap>& get_mut_mipmaps();
+        // void create_vk_image(APP::VkDeviceManager* device, VkImageViewType image_view_type = VK_IMAGE_VIEW_TYPE_2D, VkImageCreateFlags flags = 0);
     private:
         std::string m_name;
         std::vector<uint8_t> m_data;

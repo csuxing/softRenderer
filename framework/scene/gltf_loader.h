@@ -2,7 +2,6 @@
 #define _GLTF_LOADER_H_H_
 
 #include <memory>
-#include <mutex>
 #include <string>
 
 #define TINYGLTF_NO_STB_IMAGE
@@ -15,6 +14,7 @@
 #include "submesh.h"
 #include "scene.h"
 #include "basic_define.h"
+
 #include "import_image.h"
 namespace SG
 {

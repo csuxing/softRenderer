@@ -9,8 +9,11 @@
 #include "core/buffer.h"
 #include "core/command_buffer.h"
 
+#include "common/vk_common.h"
+
 #include "submesh.h"
 #include "core/helpers.h"
+#include "core/image.h"
 
 namespace SG
 {
@@ -154,6 +157,23 @@ namespace SG
 
         return result;
     }
+
+    inline void upload_image_to_gpu(RHI::CommandBuffer& command_buffer, RHI::Buffer& staging_buffer, ImportImage& image)
+    {
+        image.clear_data();
+
+        {
+            RHI::ImageMemoryBarrier memory_barrier{};
+            memory_barrier.old_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+            memory_barrier.new_layout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
+            memory_barrier.src_access_mask = 0;
+            memory_barrier.dst_access_mask = VK_ACCESS_TRANSFER_WRITE_BIT;
+            memory_barrier.src_stage_mask = VK_PIPELINE_STAGE_HOST_BIT;
+            memory_barrier.dst_stage_mask = VK_PIPELINE_STAGE_TRANSFER_BIT;
+            // command_buffer.image_memory_barrier(image);
+        }
+    }
+
     GltfLoader::GltfLoader(APP::VkDeviceManager* deviceManager):
         m_deviceManager(deviceManager)
     {
@@ -269,6 +289,8 @@ namespace SG
             auto imageUrl = m_modelPath + "\\" + gltfImage.uri;
             image = ImportImage::load(gltfImage.name, imageUrl, ImportImage::Unknown);
         }
+
+        // check whether the format is supported by the GPU
         return image;
     }
 
@@ -382,12 +404,32 @@ namespace SG
     {
         auto scene = Scene();
         scene.setName("gltfModelScene");
+        auto image_count = m_model.images.size();
         std::vector<std::unique_ptr<ImportImage>> image_components;
-        for (int i = 0; i < m_model.images.size(); ++i)
+        for (int i = 0; i < image_count; ++i)
         {
-            auto& image = parseImage(m_model.images[i]);
+            auto&& image = parseImage(m_model.images[i]);
             image_components.push_back(std::move(image));
         }
-        return Scene();
+
+        size_t image_index = 0;
+        while (image_index < image_count)
+        {
+            std::vector<RHI::Buffer> transient_buffers;
+            auto& commandBuffer = m_deviceManager->requestCommandBuffer();
+            commandBuffer.begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT, 0);
+            size_t batch_size = 0;
+            while (image_index < image_count && batch_size < 64 * 1024 * 1024)
+            {
+                auto& image = image_components.at(image_index);
+                RHI::Buffer stage_buffer{ m_deviceManager, image->get_data().size(),
+                    VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY };
+                batch_size += image->get_data().size();
+                stage_buffer.update(image->get_data());
+
+            }
+        }
+
+        return scene;
     }
 }

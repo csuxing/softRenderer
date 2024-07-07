@@ -1,6 +1,10 @@
 #ifndef _COMMAND_BUFFER_H__
 #define _COMMAND_BUFFER_H__
 #include <volk.h>
+
+#include "image_view.h"
+#include "common/vk_common.h"
+
 namespace RHI
 {
     class CommandPool;
@@ -31,6 +35,7 @@ namespace RHI
         void copyBuffer(const Buffer& srcBuffer, const Buffer& dstBuffer, VkDeviceSize size);
         bool isRecording() const;
         VkCommandBuffer getHandle() const noexcept { return m_handle; }
+        void image_memory_barrier(const RHI::ImageView& image_view, const RHI::ImageMemoryBarrier& memory_barrier) const;
     protected:
     private:
         CommandPool*        m_commandPool{};
